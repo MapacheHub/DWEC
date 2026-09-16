@@ -1,11 +1,20 @@
+//  1.
 const nombre = "Jorge"
-let edad = 24
-const tieneMascotas = true
-edad = 42
-// tieneMascotas = false
 
+//  2.
+let edad = 24
+
+//  3.
+const tieneMascotas = true
+
+//  4.
+edad = 42
+// tieneMascotas = false                    //  const significa Constante, ergo no se puede cambiar
+
+//  5.
 console.log(nombre, typeof nombre, " | ",edad, typeof edad,  " | ",tieneMascotas, typeof tieneMascotas)
 
+//  6.
 let mascota
 if (tieneMascotas === true) {
     mascota = "si"

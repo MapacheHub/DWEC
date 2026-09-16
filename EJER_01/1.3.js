@@ -1,19 +1,25 @@
+//  1.
 const producto = {
     nombre: "Eyefon",
     precio: 1000
 }
 
+//  2.
 const cliente = {
     nombreCliente: "Enrique",
     esPremium: true
 }
 
+//  3.
 const pedido = {
-    ...producto, ...cliente
+    ...producto, 
+    ...cliente
 }
 
+//  4.
 console.log(pedido)
 
+//  5.
 const producto2 = {
     nombre: "Eyefon",
 }
