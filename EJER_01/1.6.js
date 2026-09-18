@@ -1,3 +1,4 @@
+// 1.
 const cursos = [
     {
     nombre: "Lengua",
@@ -65,6 +66,7 @@ const cursos = [
 }
 ]
 
+// 2.
 const resumenCursos = cursos.map(cursos => {
   const sumCal = cursos.estudiantes.reduce((acumulador, estudiantes) => {
     return acumulador + estudiantes.calificacion
@@ -78,12 +80,15 @@ const resumenCursos = cursos.map(cursos => {
   }
 })
 
+//  3.
 const cursosDestacados = resumenCursos.filter(cursos => cursos.promedioCalificaciones >= 7)
 
+//  4.
 cursosDestacados.forEach(resumenCursos => {
   console.log(`El curso ${resumenCursos.nombreCurso} tiene un promedio de ${resumenCursos.promedioCalificaciones} y es considerado destacado.`)
 })
 
+//   5.
 cursos.forEach(cursos => {
     const malaPinta = cursos.estudiantes.filter(estudiantes => estudiantes.calificacion < 4)
 
