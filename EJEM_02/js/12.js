@@ -9,7 +9,7 @@ const tecnologias = ['HTML', 'CSS', 'JavaScript', 'React.js', 'Node.js', 'Nest.j
 // }
 
 // forEach
-//EJECUTA UNA FUNCIÓN POR CADA ELEMENTO DEL ARREGLO
+//EJECUTA UNA FUNCIÓN POR CADA ELEMENTO DEL ARREGLO     haces un "for each" de cada dato de "tecnologias", ese dato lo meteras en una funcion llamada "tech"
 // tecnologias.forEach(function(tech) {
 //     console.log(tech)
 // })
