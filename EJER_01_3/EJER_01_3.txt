@@ -1,0 +1,145 @@
+### Ejercicio 1 — Validador de contraseña
+
+
+Completa la función `esContrasenaValida`, que debe devolver `true` si la contraseña tiene 8 caracteres o más.
+
+```jsx
+function esContrasenaValida(contrasena) {
+  //TODO: completa el cuerpo de la función
+}
+
+const contrasenas = ['1234', 'miClave2024', 'abc']
+
+//TODO: usa esContrasenaValida como literal de función anónimo
+// dentro de un .map() para obtener [false, true, false]
+const resultado = contrasenas.map(/* ... */)
+
+console.log(resultado) // [false, true, false]
+```
+
+**Reflexiona:** ¿en qué casos conviene dar nombre a una función y en cuáles es mejor usarla como literal anónimo?
+
+
+### Ejercicio 2 — Calculadora por función
+
+
+Implementa `suma`, `resta` y `potencia` como funciones flecha, y `aplicarOperacion`, una función de orden superior que reciba dos números y la operación a aplicar.
+
+```jsx
+const suma = /* completa */
+const resta = /* completa */
+
+// potencia debe lanzar un error si el exponente es negativo
+// (pista: usa cuerpo de bloque y throw)
+const potencia = (base, exponente) => {
+  //TODO
+}
+
+const aplicarOperacion = (a, b, operacion) => /* completa */
+
+console.log(aplicarOperacion(5, 3, suma))  // 8
+console.log(aplicarOperacion(5, 3, resta)) // 2
+console.log(aplicarOperacion(2, 3, potencia)) // 8
+console.log(aplicarOperacion(2, -1, potencia)) // debería lanzar un error
+```
+
+
+### Ejercicio 3 — Catálogo de productos
+
+
+Dado el siguiente vector de productos:
+
+```jsx
+const productos = [
+  { nombre: 'Ratón', precio: 15, stock: 0 },
+  { nombre: 'Teclado', precio: 25, stock: 8 },
+  { nombre: 'Monitor', precio: 120, stock: 3 }
+]
+```
+
+Sin usar bucles `for`, escribe expresiones encadenando `filter` y `map` para obtener:
+
+1. Un vector con los **nombres** de los productos que tienen stock disponible.
+2. Una cadena de texto con una lista HTML `<ul><li>...</li></ul>` que contenga esos nombres.
+
+```jsx
+const disponibles = productos /* .filter(...).map(...) */
+
+const listaHtml = '<ul>' + disponibles
+  /* .map(nombre => `<li>${nombre}</li>`) */
+  .join('') + '</ul>'
+
+console.log(disponibles) // ['Teclado', 'Monitor']
+console.log(listaHtml)   // <ul><li>Teclado</li><li>Monitor</li></ul>
+```
+
+
+### Ejercicio 4 — Suma flexible
+
+
+Implementa `sumaFlexible(x, y)`, que acepte números o vectores de números, comprobando el tipo real con `Array.isArray`.
+
+```jsx
+'use strict'
+
+const sumaFlexible = (x, y) => {
+  const valorDe = (v) => /* si v es un array, súmalo; si no, devuélvelo tal cual */
+
+  return valorDe(x) + valorDe(y)
+}
+
+console.log(sumaFlexible(3, 4))      // 7
+console.log(sumaFlexible([1, 2], 4)) // 7
+```
+
+
+### Ejercicio 5 — Creación de usuarios
+
+
+Completa `crearUsuario`, que reciba un nombre obligatorio y un rol con valor predeterminado `'alumno'`.
+
+```jsx
+const crearUsuario = (nombre, rol = /* ... */) => ({ nombre, rol })
+
+console.log(crearUsuario('Ana'))          // { nombre: 'Ana', rol: 'alumno' }
+console.log(crearUsuario('Luis', 'admin')) // { nombre: 'Luis', rol: 'admin' }
+```
+
+
+### Ejercicio 6 — Máximo sin `Math.max`
+
+
+Implementa tu propia función `maximo` usando el parámetro **rest**, y llámala usando el operador **spread** sobre un vector ya existente.
+
+```jsx
+const maximo = (...numeros) => {
+  //TODO: recorre "numeros" con un bucle y guarda el mayor valor
+}
+
+const notas = [7, 9, 5, 10, 6]
+
+console.log(maximo(...notas)) // 10
+```
+
+**Reflexiona:** ¿qué diferencia hay entre el operador spread y el parámetro rest, aunque usen el mismo símbolo `...`?
+
+
+### Ejercicio 7 — División segura
+
+
+Implementa `dividir(a, b)`, que lance una excepción si `b` es 0, y captúrala con `try / catch / finally`.
+
+```jsx
+const dividir = (a, b) => {
+  //TODO: lanza un error si b === 0
+  return a / b
+}
+
+try {
+  console.log(dividir(10, 0))
+} catch (e) {
+  console.log('Error:', /* ... */)
+} finally {
+  console.log('Operación finalizada')
+}
+```

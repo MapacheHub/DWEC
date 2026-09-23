@@ -1,0 +1,102 @@
+**Ejercicio 1.1: Variables, Tipos de Dato y Strings**
+
+
+1. Declara una variable ‘nombre’ usando ‘const’ y asígnale tu nombre.
+
+2. Declara una variable ‘edad’ usando ‘let’ y asígnale tu edad.
+
+3. Declara una variable ‘tieneMascota’ usando ‘const’ y asígnale un valor booleano.
+
+4. Reasigna un nuevo valor a la variable ‘edad’ y ‘tieneMascota’.
+
+5. Imprime en consola el valor y el tipo de cada una de las tres variables.
+
+6. Crea una frase que describa a la persona usando Template Strings, por ejemplo: “Juan tiene 30 años y no tiene mascota.”. Imprímela en consola.
+
+
+**Ejercicio 1.2: Objetos y su Manipulación**
+
+
+1. Crea un objeto ‘coche’ con las propiedades: ‘marca’ (string), ‘modelo’ (string), ‘año’ (number) y ‘estaDisponible’ (boolean).
+
+2. Muestra el objeto completo en consola utilizando console.table().
+
+3. Usa la desestructuración (destructuring) para extraer la ‘marca’ y el ‘modelo’ en variables separadas e imprímelas en consola.
+
+4. Cambia el valor de la propiedad ‘estaDisponible’ a ‘true’.
+
+5. Agrega una nueva propiedad ‘color’ al objeto.
+
+6. Elimina la propiedad ‘año’ del objeto.
+
+7. Vuelve a imprimir el objeto modificado en consola.
+
+
+**Ejercicio 1.3: Combinando Objetos**
+
+
+1. Crea un objeto ‘producto’ con las propiedades: ‘nombre’ (string), ‘precio’ (number).
+
+2. Crea un objeto ‘cliente’ con las propiedades: ‘nombreCliente’ (string), ‘esPremium’ (boolean).
+
+3. Combina ambos objetos en un nuevo objeto llamado ‘pedido’ utilizando el Spread Operator (…).
+
+4. Muestra el objeto ‘pedido’ en consola.
+
+5. ¿Qué sucede si las propiedades de los objetos originales tienen el mismo nombre? Crea un nuevo objeto ‘cliente2’ con la propiedad ‘nombre’ y combínalo con el objeto ‘producto’ para ver el resultado.
+
+
+**Ejercicio 1.4: Arrays y sus Métodos**
+
+
+1. Crea un array llamado `ciudades` con los siguientes strings: `"Madrid"`, `"Buenos Aires"`, `"Tokio"`, `"Nueva York"`, `"París"`.
+
+2. Añade con otra sentencia `"Roma"` al final del array.
+
+3. Crea un nuevo array `ciudadesMayusculas` utilizando el método `.map()` que contenga todos los elementos del array original pero en mayúsculas.
+
+4. Crea un nuevo array `ciudadesFiltradas` utilizando el método `.filter()` que contenga solo los elementos que tienen más de 6 caracteres.
+
+5. Imprime los tres arrays en consola (`ciudades`, `ciudadesMayusculas`, `ciudadesFiltradas`).
+
+
+**Ejercicio 1.5: Uniendo todo**   
+
+
+1. Crea un array de objetos llamado ‘estudiantes’. Cada objeto debe representar a un estudiante y tener las propiedades ‘nombre’ (string), ‘apellidos’ (string),‘calificacion’ (number) y ‘aprobado’ (boolean). Añade al menos 3 estudiantes.
+2. Utiliza el método .map() para crear un nuevo array donde a cada estudiante se le añade una propiedad ‘id’ única (puede ser 1, 2, 3…).
+
+3. Utiliza el método .filter() para obtener un array que contenga únicamente a los estudiantes que tienen una calificación mayor o igual a 5.
+
+4. Para cada estudiante en el array filtrado (los aprobados), imprime un mensaje en consola usando Template Strings que diga: “¡Felicidades [nombre], has aprobado con [calificacion]!”.
+5. Recorre el array original y verifica si el valor de la propiedad aprobado es coherente con la calificacion (es decir, si calificacion >= 5 entonces aprobado debe ser true, y si es menor, debe ser false).
+
+Si hay incoherencias, imprime un mensaje como:
+“⚠️ Incoherencia en el registro de [nombre]: calificación = [calificacion], aprobado = [aprobado]”
+
+
+**Ejercicio 1.6: Objetos con Arrays de Objetos Anidados**
+
+
+1. Crea un array llamado `cursos`, donde cada elemento sea un objeto que represente un curso. Cada curso debe tener las siguientes propiedades:
+- `nombre` (string)
+- `profesor` (string)
+- `estudiantes` (array de objetos), donde cada objeto represente a un estudiante con:
+- nombre (string)
+- `calificacion` (number)
+
+Crea al menos 4 cursos, y cada uno con al menos 3 estudiantes.
+
+2. Utiliza `.map()` para crear un nuevo array `resumenCursos` que contenga objetos con:
+- `nombreCurso`
+- `promedioCalificaciones` (promedio de las calificaciones de los estudiantes)
+
+3. Utiliza `.filter()` para obtener un array `cursosDestacados` que contenga solo los cursos cuyo promedio de calificaciones sea mayor o igual a 7.
+
+4. Recorre los cursos destacados e imprime en consola un mensaje como:
+
+`"📘 El curso [nombreCurso] tiene un promedio de [promedio] y es considerado destacado."`
+
+5. Verifica si hay algún estudiante con calificación menor a 4 en cada curso. Si lo hay, imprime:
+
+`"⚠️ Atención: En el curso [nombreCurso] hay estudiantes con calificaciones muy bajas."`

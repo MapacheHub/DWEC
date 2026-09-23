@@ -1,0 +1,87 @@
+### Ejercicio 2.1: Arrays y Métodos
+
+
+1. Crea un array `numeros` con al menos 6 números.
+2. Usa el método `.map()` para crear un nuevo array `dobles` que contenga el doble de cada número del array original.
+3. Usa el método `.filter()` para crear un nuevo array `pares` que contenga solo los números pares del array `numeros`.
+4. Usa un bucle `for...of` para imprimir cada número del array `pares` en la consola.
+
+
+### Ejercicio 2.2: Funciones
+
+
+1. Escribe una **Function Declaration** llamada `calcularAreaRectangulo` que acepte `base` y `altura` y devuelva el área.
+2. Escribe la misma lógica usando una **Function Expression** y guárdala en una constante `calcularAreaTriangulo`.
+3. Convierte la función anterior en una **Arrow Function**.
+4. Añade valores por defecto a los parámetros de cualquiera de las funciones anteriores.
+5. Llama a cada función con valores de prueba y muestra el resultado en la consola.
+
+
+### Ejercicio 2.3: Condicionales y Operadores Lógicos
+
+
+1. Crea una función que reciba un `saldo` y una cantidad a `retirar`.
+2. Dentro de la función, comprueba si el `saldo` es mayor o igual a la cantidad a `retirar`.
+3. Si se puede retirar, muestra “Retiro exitoso. Saldo restante: [nuevo saldo]”.
+4. Si no, muestra “Saldo insuficiente”.
+5. **Extra:** Añade una variable booleana `tieneTarjetaCredito`. Modifica la lógica para que, si el saldo no es suficiente PERO `tieneTarjetaCredito` es `true`, muestre “Saldo insuficiente, pagando con tarjeta de crédito”.
+
+
+### Ejercicio 2.4: Combinación de Objetos y Optional Chaining
+
+
+1. Crea un objeto `usuario` con `nombre` y `email`.
+2. Crea un objeto `perfil` con `puesto` y `empresa`.
+3. Combina ambos objetos en un nuevo objeto `empleado` usando el “spread operator” (`...`).
+4. Supongamos que el objeto `empleado` podría tener o no una propiedad anidada `perfil.direccion.ciudad`. Intenta acceder a `empleado.perfil.direccion.ciudad` usando “Optional Chaining” (`?.`) para evitar errores.
+5. Usa el “Nullish Coalescing Operator” (`??`) para asignar un valor por defecto (“Ciudad no especificada”) si el resultado del paso anterior es `null` o `undefined`.
+
+
+### Ejercicio 2.5 Gestión y Análisis de Datos de Usuarios
+
+
+1. **Crea el archivo `gestorUsuarios.js`:**
+    - Dentro de este archivo, crea y exporta (usando `export`) una función llamada `crearPerfil`. Esta función debe aceptar `nombre`, `email` y `edad` y devolver un objeto que represente a un usuario.
+    - Crea otra función llamada `mostrarPerfil`. Esta función debe aceptar un objeto de usuario y devolver un string con formato, por ejemplo: `Nombre: [nombre], Email: [email], Edad: [edad]`.
+    - Exporta `mostrarPerfil` como la exportación por defecto (`export default`).
+2. **Crea el archivo `main.js`:**
+    - Importa `crearPerfil` y `mostrarPerfil` desde `gestorUsuarios.js`. Puedes usar un alias para la importación de `crearPerfil` si lo deseas.
+    - Llama a `crearPerfil` dos veces para crear dos perfiles de usuario diferentes y guárdalos en un array llamado `usuarios`.
+    - Itera sobre el array `usuarios` y, para cada usuario, utiliza `mostrarPerfil` para imprimir su información en la consola.
+3. **Mejora el archivo `gestorUsuarios.js`:**
+    - Mantén la función `crearPerfil` que ya tenías.
+    - Añade y exporta una nueva función `esMayorDeEdad`. Esta función recibirá un objeto de usuario y devolverá `true` si su edad es 18 o más, y `false` en caso contrario.
+    - Añade y exporta una función `obtenerMayoresDeEdad` que reciba un array de usuarios y, utilizando el método `.filter()` y la función `esMayorDeEdad`, devuelva un nuevo array solo con los usuarios que cumplen la condición.
+    - Añade y exporta una función `calcularPromedioEdad` que reciba un array de usuarios y calcule su edad promedio. Puedes usar el método `.reduce()` para esto.
+    - Mantén `mostrarPerfil` como la exportación por defecto.
+4. **Actualiza el archivo `main.js`:**
+    - Importa todas las funciones necesarias desde `gestorUsuarios.js`.
+    - Crea un array con al menos 5 objetos de usuario, con diferentes edades (algunos mayores de 18 y otros menores).
+    - Usa las funciones importadas para realizar las siguientes operaciones y mostrar los resultados en la consola:
+        1. Llama a `obtenerMayoresDeEdad` para filtrar el array y guarda el resultado en una nueva variable.
+        2. Muestra un encabezado que diga “Usuarios mayores de edad:” y luego itera sobre el nuevo array para mostrar el perfil de cada uno de esos usuarios.
+        3. Llama a `calcularPromedioEdad` con el array original de usuarios y muestra el resultado en un mensaje claro, por ejemplo: “La edad promedio de los usuarios es: [promedio]”.
+5. **Configuración en HTML:**
+    - Para probar este código en un navegador, recuerda que debes enlazar tu archivo `main.js` en el HTML usando el atributo `type="module"` en la etiqueta script: `<script type="module" src="main.js"></script>`.
+
+
+### Ejercicio 2.6 Gestión de Inventario de una Tienda
+
+
+1. **Crea el archivo `inventario.js`:**
+    - Define y exporta una función `crearProducto` que acepte `nombre`, `categoria`, `precio` y `stock`, y devuelva un objeto producto.
+    - Define y exporta una función `filtrarPorCategoria` que reciba el array de inventario y una `categoria`, y devuelva un nuevo array con los productos que pertenecen a esa categoría.
+    - Define y exporta una función `listarProductosAgotados` que reciba el inventario y devuelva un array con los productos cuyo `stock` es 0.
+    - Define y exporta una función `calcularValorTotalInventario` que reciba el inventario y devuelva el valor total (sumando el `precio` * `stock` de cada producto).
+    - Como exportación por defecto (`export default`), crea una función `resumenInventario` que reciba el inventario y muestre en consola un resumen: número total de productos, número de categorías distintas y valor total.
+2. **Crea el archivo `tienda.js`:**
+    - Importa todas las funciones desde `inventario.js`.
+    - Crea un array vacío `inventario`.
+    - Usa la función `crearProducto` para añadir al menos 6 productos al array. Asegúrate de tener varias categorías (ej: “Electrónica”, “Ropa”, “Libros”) y de que al menos un producto tenga `stock: 0`.
+    - Utiliza las funciones importadas para hacer lo siguiente y mostrar los resultados en la consola:
+        1. Obtén y muestra todos los productos de la categoría “Ropa”.
+        2. Obtén y muestra una lista de los productos agotados.
+        3. Calcula y muestra el valor total del inventario.
+        4. Ejecuta la función `resumenInventario` para ver el resumen completo.
+3. **Configuración en HTML:**
+    - Enlaza tu archivo `tienda.js` en el HTML.
