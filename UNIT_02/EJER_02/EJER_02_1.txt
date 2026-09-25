@@ -1,0 +1,84 @@
+### Ejercicio 2.1: Creando tu primera lista de reproducción
+
+
+Crea un archivo `ejercicio-01.js`. Dentro de él, define un arreglo de objetos llamado `playlist`. Cada objeto representará una canción y debe tener las siguientes propiedades: `titulo` (string), `artista` (string) y `duracion` (número en segundos).
+
+Agrega al menos 10 canciones a la `playlist`. Luego, utiliza un bucle `forEach` para imprimir en la consola el título y el artista de cada canción.
+
+
+### Ejercicio 2.2: Filtrando canciones largas
+
+
+Crea un archivo `ejercicio-02.js`. Copia la `playlist` del ejercicio anterior. Ahora, utiliza el método `.filter()` para crear un nuevo arreglo que contenga únicamente las canciones que duren más de 180 segundos.
+
+Finalmente, utiliza `.map()` en el nuevo arreglo filtrado para crear un arreglo de strings que contenga el mensaje: “La canción ‘[TITULO]’ de [ARTISTA] dura [DURACION] segundos.” Imprime este último arreglo en la consola.
+
+
+### Ejercicio 2.3: Módulo para gestionar una Biblioteca Digital
+
+
+Crea dos archivos: `biblioteca.js` y `app.js`.
+
+En `biblioteca.js`, vas a crear un módulo para gestionar una colección de libros. Este módulo debe tener:
+1. Un arreglo de objetos llamado `libros`. Cada objeto representará un libro con `id` (número), `titulo` (string), `autor` (string) y `paginas` (número). Inicialízalo con 10 libros.
+2. Una función `agregarLibro(nuevoLibro)` que añada un nuevo libro a la colección.
+3. Una función `obtenerLibros()` que devuelva la colección completa.
+
+Exporta ambas funciones.
+
+En `app.js`, importa las funciones del módulo `biblioteca.js`. Usa `obtenerLibros()` para mostrar la colección inicial. Luego, usa `agregarLibro()` para añadir un nuevo libro y vuelve a mostrar la colección para verificar que se ha añadido.
+
+
+### Ejercicio 2.4: Buscando y eliminando libros
+
+
+Mejora el módulo `biblioteca.js` del ejercicio anterior. Añade las siguientes funciones:
+1. `buscarLibro(id)`: Utiliza `.find()` para buscar un libro por su `id` y devolverlo.
+2. `eliminarLibro(id)`: Utiliza `.findIndex()` para encontrar el índice del libro con ese `id` y luego `.splice()` para eliminarlo de la colección.
+
+En `app.js`, importa y prueba estas nuevas funciones. Busca un libro por su `id` y muéstralo. Luego, elimina un libro y muestra la colección final.
+
+
+### Ejercicio 2.5: Calculando el total de páginas
+
+
+Añade una nueva función al módulo `biblioteca.js`:
+1. `calcularTotalPaginas()`: Utiliza el método `.reduce()` para calcular la suma total de las páginas de todos los libros de la biblioteca.
+
+En `app.js`, importa y utiliza esta función para imprimir en la consola el número total de páginas que suman todos los libros.
+
+
+### Ejercicio 2.6: Ordenando los libros
+
+
+Añade una nueva función al módulo `biblioteca.js`:
+1. `ordenarPorPaginas()`: Utiliza el método `.sort()` para ordenar los libros de la colección de menor a mayor número de páginas.
+
+En `app.js`, muestra la colección de libros, luego llama a `ordenarPorPaginas()` y vuelve a mostrar la colección para verificar que se ha ordenado correctamente.
+
+
+### Ejercicio 2.7: Verificando la extensión de los libros
+
+
+Añade dos funciones más al módulo `biblioteca.js`:
+1. `hayLibrosLargos(limitePaginas)`: Utiliza `.some()` para comprobar si hay al menos un libro en la colección que tenga más páginas que `limitePaginas`.
+2. `todosSonLibrosCortos(limitePaginas)`: Utiliza `.every()` para comprobar si todos los libros de la colección tienen menos páginas que `limitePaginas`.
+
+En `app.js`, prueba ambas funciones con diferentes valores de `limitePaginas` y muestra los resultados (`true` o `false`).
+
+
+### Ejercicio 2.8: Sistema de gestión de empleados
+
+
+Crea un nuevo proyecto con dos archivos: `empleados.js` y `main.js`.
+
+En `empleados.js`, crea un módulo para gestionar una lista de empleados. El arreglo de objetos de empleados debe tener: `id`, `nombre`, `departamento` y `salario`.
+
+El módulo debe exportar las siguientes funciones:
+* `agregarEmpleado(empleado)`
+* `eliminarEmpleado(id)`
+* `buscarPorDepartamento(departamento)`: Debe devolver un arreglo con los empleados de ese departamento (`.filter()`).
+* `calcularSalarioPromedio()`: Debe devolver el salario promedio de todos los empleados (`.reduce()`).
+* `obtenerEmpleadosOrdenadosPorSalario()`: Debe devolver un nuevo arreglo con los empleados ordenados de mayor a menor salario (`.sort()`).
+
+En `main.js`, importa y utiliza todas las funciones para simular la gestión de empleados de una empresa. Añade varios empleados, busca por departamento, calcula el salario promedio y muestra la lista de empleados ordenados por salario.
