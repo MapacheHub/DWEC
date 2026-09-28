@@ -1,12 +1,12 @@
 let playlist = [
-    {titulo: "1", artista: "a", duracion: 1},
-    {titulo: "2", artista: "b", duracion: 2},
-    {titulo: "3", artista: "c", duracion: 3},
-    {titulo: "4", artista: "d", duracion: 4},
-    {titulo: "5", artista: "e", duracion: 5},
-    {titulo: "6", artista: "f", duracion: 6},
-    {titulo: "7", artista: "g", duracion: 7},
-    {titulo: "8", artista: "h", duracion: 8}
+    {titulo: "Soft Fuzzy Man", artista: "Lemon Demon", duracion: 175},
+    {titulo: "Touch-Tone Telephone", artista: "Lemon Demon", duracion: 283},
+    {titulo: "Still Life", artista: "Half Alive", duracion: 257},
+    {titulo: "Assumtion", artista: "d", duracion: 218},
+    {titulo: "CI", artista: "e", duracion: 225},
+    {titulo: "FD", artista: "f", duracion: 163},
+    {titulo: "Ghost", artista: "g", duracion: 157},
+    {titulo: "Virtual Insanity", artista: "h", duracion: 234}
 ]
 
 let playlistLong = playlist.filter(function (song){
@@ -16,6 +16,6 @@ let playlistLong = playlist.filter(function (song){
 })
 
 playlistLong.forEach(function (song) {
-    console.log("Titulo de la cancion: " + song.titulo + " | Artista: " + song.artista)
+    console.log("La cancion " + song.titulo + " de " + song.artista + " dura " + song.duracion + " segundos.")
 }
 )
