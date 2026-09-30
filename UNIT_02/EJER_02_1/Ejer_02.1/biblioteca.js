@@ -26,17 +26,38 @@ export function obtenerLibros(){
 //  2.4
 
 export function buscarLibro(num){
-    Libros.find(libro)
-    if (libro.id == num) {
-        return libro
-    }
+    return Libros.find(libro => libro.id === num)
 }
 
 export function eliminarLibro(num){
-    Libros.findIndex(libro){
-        if (libro.id == num){
-            libro.splice()
-        }
+    let elim = Libros.findIndex(libro => libro.id === num)
+
+    if(elim !== -1) {
+        Libros.splice(elim, 1)
+        return true
     }
+    return false
+}
+
+//  2.5
+
+export function calcularTotalPaginas(){
+    return console.log(Libros.reduce((total, libro) => total + libro.paginas, 0))
+}
+
+//  2.6
+
+export function ordenarPorPaginas(){
+    return console.log(Libros.sort((a, b) => a.paginas - b.paginas))
+}
+
+//  2.7
+
+export function hayLibrosLargos(LimiteDePaginas){
+    return console.log(Libros.some(libro => libro.paginas > LimiteDePaginas))
+}
+
+export function todosSonLibrosCortos(LimiteDePaginas){
+    return console.log(Libros.every(libro => libro.paginas < LimiteDePaginas))
 }
 
