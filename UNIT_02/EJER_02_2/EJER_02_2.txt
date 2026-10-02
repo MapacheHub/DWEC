@@ -1,0 +1,154 @@
+# EJER_02.2
+
+## 🎵 Tienda de música: catálogo, pedidos y almacén
+
+Una pequeña tienda de equipos de música y vinilos quiere automatizar la gestión de su almacén. Tu tarea es programar, en el archivo `tienda.js`, las funciones que usará su sistema: crear el catálogo, hacer búsquedas, calcular valores, procesar pedidos en cola y gestionar un carrito que permite deshacer acciones. En el archivo de abajo tienes los archivos necesarios para realizar la práctica.
+
+EJER_02.2_tienda-musica.zip
+
+No hay interfaz web: todo se ejecuta con **Node.js** y la salida se ve en la terminal.
+
+---
+
+### Archivos del proyecto
+
+| Archivo | ¿Lo modificas? | Para qué sirve |
+| --- | --- | --- |
+| `datos.js` | No | Datos de partida (catálogo en forma de matriz, novedades y pedidos) |
+| `tienda.js` | **Sí** | Aquí escribes tus funciones |
+| `pruebas.js` | No | Comprueba automáticamente cada función |
+| `main.js` | No | Genera el informe completo de la tienda |
+
+### Cómo trabajar
+
+1. Abre la carpeta del proyecto en VS Code y una terminal.
+2. Completa las funciones de `tienda.js` **en orden**: muchas usan las anteriores.
+3. Ejecuta las pruebas cada vez que termines una función:
+    
+    ```bash
+    node pruebas.js
+    ```
+    
+    Verás ✅ si la función es correcta, ❌ si el resultado no es el esperado (con lo que esperaba y lo que obtuvo) y 💥 si se produce un error.
+    
+4. Cuando las 45 pruebas estén en verde, ejecuta el informe:
+    
+    ```bash
+    node main.js
+    ```
+    
+
+### Normas
+
+- Usa sintaxis **ES6**: `const`/`let`, funciones flecha, plantillas de texto y `export`.
+- Resuelve el ejercicio con **métodos de arrays**. No uses bucles `for` salvo que el enunciado lo permita (en la 6.1 puedes usar `while`).
+- Salvo en la **Parte 5**, las funciones **no deben modificar** los arrays que reciben. Si necesitas ordenar, haz antes una copia con `[...array]` o `slice()`.
+- No cambies el nombre ni los parámetros de las funciones.
+
+---
+
+### Los datos
+
+El catálogo llega como una **matriz** (UT 2.1), donde cada fila es `[nombre, categoria, precio, stock]`:
+
+```jsx
+export const catalogoMatriz = [
+  ['Tocadiscos', 'equipos', 200, 3],
+  ['Altavoz', 'equipos', 400, 4],
+  // ...
+];
+```
+
+Los pedidos llegan como **texto**, con el formato `cliente|producto:cantidad;producto:cantidad`:
+
+```jsx
+'Lucía|Tocadiscos:1;Vinilo Jazz:2'
+```
+
+---
+
+### Parte 1 · El catálogo
+
+| Función | Qué hace | Métodos orientativos |
+| --- | --- | --- |
+| 1.1 `crearCatalogo(matriz)` | Convierte la matriz en un array de objetos `{ nombre, categoria, precio, stock }`. Si no recibe un array, devuelve `[]` | `Array.isArray`, `map`, acceso por índice `fila[0]` |
+| 1.2 `ampliarCatalogo(catalogo, matrizNovedades)` | Catálogo nuevo con las novedades al final | `concat` |
+| 1.3 `nombresOrdenados(catalogo)` | Nombres en orden alfabético respetando tildes | `map`, `sort`, `localeCompare` |
+| 1.4 `ordenarPorPrecio(catalogo, descendente)` | Copia ordenada por precio | spread, `sort`, `reverse` |
+| 1.5 `tresMasBaratos(catalogo)` | Nombres de los tres más baratos | `slice`, `map` |
+
+### Parte 2 · Búsquedas
+
+| Función | Qué hace | Métodos orientativos |
+| --- | --- | --- |
+| 2.1 `buscarProducto(catalogo, nombre)` | El producto o `undefined` (sin distinguir mayúsculas) | `find`, `toLowerCase` |
+| 2.2 `existeProducto(catalogo, nombre)` | `true` / `false` | `map` + `includes` (obligatorio) |
+| 2.3 `posicionProducto(catalogo, nombre)` | Posición o `-1` | `findIndex` |
+| 2.4 `agotados(catalogo)` | Nombres de los productos con stock 0 | `filter`, `map` |
+| 2.5 `productosEntre(catalogo, minimo, maximo)` | Productos en ese rango de precio | `filter` |
+
+### Parte 3 · Cálculos
+
+| Función | Qué hace | Métodos orientativos |
+| --- | --- | --- |
+| 3.1 `valorAlmacen(catalogo)` | Suma de precio × stock | `reduce` |
+| 3.2 `productoMasCaro(catalogo)` | El objeto del producto más caro | `reduce` |
+| 3.3 `unidadesPorCategoria(catalogo)` | `{ equipos: 7, accesorios: 29, discos: 14 }` | `reduce` con un objeto como acumulador |
+| 3.4 `hayAgotados(catalogo)` | ¿Alguno sin stock? | `some` |
+| 3.5 `preciosValidos(catalogo)` | ¿Todos los precios son números > 0? | `every`, `typeof` |
+
+### Parte 4 · Pedidos
+
+| Función | Qué hace | Métodos orientativos |
+| --- | --- | --- |
+| 4.1 `parsearPedido(texto)` | Convierte el texto en `{ cliente, lineas: [{ nombre, cantidad }] }` | `split` (tres veces), `map`, `Number` |
+| 4.2 `puedeServirse(catalogo, pedido)` | ¿Existen todos los productos y hay stock suficiente? | `every`, `buscarProducto` |
+| 4.3 `totalPedido(catalogo, pedido)` | Importe total | `reduce` |
+| 4.4 `servirPedido(catalogo, pedido)` | Catálogo **nuevo** con el stock descontado | `map`, `find`, `{ ...objeto }` |
+| 4.5 `generarTicket(catalogo, pedido)` | Ticket como un único texto con saltos de línea | `map`, `join('\n')` |
+
+Ejemplo de ticket:
+
+```
+Cliente: Lucía
+1 x Tocadiscos = 200 €
+2 x Vinilo Jazz = 60 €
+TOTAL: 260 €
+```
+
+### Parte 5 · Cola de pedidos y carrito con «deshacer»
+
+En esta parte **sí** se modifican los arrays recibidos: estamos usando arrays como **cola** y como **pila** (UT 2.1).
+
+| Función | Qué hace | Métodos orientativos |
+| --- | --- | --- |
+| 5.1 `atenderSiguiente(cola)` | Saca y devuelve el primer pedido (FIFO) | `shift` |
+| 5.2 `agregarUrgente(cola, pedido)` | Lo coloca el primero; devuelve la nueva longitud | `unshift` |
+| 5.3 `agregarAlCarrito(carrito, historial, nombre)` | Añade al carrito y apunta en el historial`{ accion: 'agregar', nombre }` | `push` |
+| 5.4 `quitarDelCarrito(carrito, historial, nombre)` | Quita la primera aparición y apunta en el historial`{ accion: 'quitar', nombre, posicion }`. Devuelve `true` o `false` | `indexOf`, `splice` |
+| 5.5 `deshacer(carrito, historial)` | Revierte la última acción (LIFO). Devuelve `true` o `false` | `pop`, `lastIndexOf`, `splice` para borrar **y** para insertar |
+
+Así debe comportarse el carrito:
+
+```jsx
+const carrito = [];
+const historial = [];
+agregarAlCarrito(carrito, historial, 'Altavoz');     // ['Altavoz']
+agregarAlCarrito(carrito, historial, 'Vinilo Jazz'); // ['Altavoz', 'Vinilo Jazz']
+agregarAlCarrito(carrito, historial, 'Altavoz');     // ['Altavoz', 'Vinilo Jazz', 'Altavoz']
+quitarDelCarrito(carrito, historial, 'Altavoz');     // ['Vinilo Jazz', 'Altavoz']
+deshacer(carrito, historial);                        // ['Altavoz', 'Vinilo Jazz', 'Altavoz']
+deshacer(carrito, historial);                        // ['Altavoz', 'Vinilo Jazz']
+```
+
+### Parte 6 · Informe final
+
+| Función | Qué hace | Métodos orientativos |
+| --- | --- | --- |
+| 6.1 `procesarCola(catalogo, cola)` | Atiende todos los pedidos en orden; devuelve `{ catalogo, servidos, rechazados }`. El stock se va actualizando pedido a pedido | `while`, `atenderSiguiente`, `puedeServirse`, `servirPedido`, `push` |
+| 6.2 `productosVendidos(pedidos)` | Nombres vendidos sin repetidos y ordenados | `map`, `flat`, `filter` + `indexOf`, `sort` |
+| 6.3 `graficoStock(catalogo)` | `'Altavoz: ■■■ (3)'` por cada producto | `map`, `new Array(n).fill('■')`, `join` |
+
+---
+
+### Resultado esperado de `node main.js` (fragmento)
