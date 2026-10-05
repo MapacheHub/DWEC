@@ -18,7 +18,7 @@
 export const crearCatalogo = (matriz) => {
   // Tu código aquí
   if (!Array.isArray(matriz)) return []   // comprobamos que el array no es un array, y si asi es, lo devuleve vacio
-  return matriz.map(([nombre, categoria, precio, stock]) => ({
+  return matriz.map(([nombre, categoria, precio, stock]) => ({  
     nombre,
     categoria,
     precio,
@@ -230,12 +230,15 @@ export const atenderSiguiente = (cola) => {
 //     la nueva longitud de la cola.
 export const agregarUrgente = (cola, pedido) => {
   // Tu código aquí
+  return cola.unshift(pedido)
 };
 
 // 5.3 Añade el nombre al final del carrito y apunta la acción en el
 //     historial: { accion: 'agregar', nombre }
 export const agregarAlCarrito = (carrito, historial, nombre) => {
   // Tu código aquí
+  carrito.push(nombre)                                      //  Añade el nombre al final del carrito
+  historial.push({ accion: 'agregar', nombre })             //  Apunta la acción en el historial: { accion: 'agregar', nombre }
 };
 
 // 5.4 Quita la PRIMERA aparición del nombre en el carrito y apunta en
@@ -243,6 +246,12 @@ export const agregarAlCarrito = (carrito, historial, nombre) => {
 //     Devuelve true, o false (sin tocar nada) si no estaba.
 export const quitarDelCarrito = (carrito, historial, nombre) => {
   // Tu código aquí
+  let index = carrito.indexOf(nombre)                               //  Quita la PRIMERA aparición del nombre en el carrito
+  if (index === -1) return false                                    //  Devuelve true, o FALSE (sin tocar nada) si no estaba
+
+  carrito.splice(index, 1)
+  historial.push({ accion: 'quitar', nombre, posicion: index})      //  apunta en el historial: { accion: 'quitar', nombre, posicion }
+  return true                                                       //  Devuelve TRUE, o false (sin tocar nada) si no estaba
 };
 
 // 5.5 PILA (la última acción es la primera en deshacerse):
@@ -251,7 +260,23 @@ export const quitarDelCarrito = (carrito, historial, nombre) => {
 //     - si fue 'quitar', vuelve a insertarlo en su posición original.
 //     Devuelve true, o false si el historial estaba vacío.
 export const deshacer = (carrito, historial) => {
-  // Tu código aquí
+  // Tu código aquí                                        
+  const ultimaAccion = historial.pop();                               //  saca la última acción del historial y la revierte
+  if (!ultimaAccion) return false;                                    //  false si el historial estaba vacío.
+
+  if (ultimaAccion.accion === 'agregar') {                            //  si fue 'agregar', 
+
+    // Para deshacer un agregar, buscamos su última posición en el carrito y la eliminamos
+    const index = carrito.lastIndexOf(ultimaAccion.nombre);
+    if (index !== -1) {                                              //  quita la ÚLTIMA aparición de ese nombre;
+      carrito.splice(index, 1);
+    }
+  } else if (ultimaAccion.accion === 'quitar') {                    //  si fue 'quitar', 
+
+    // Para deshacer un quitar, insertamos el producto exactamente donde estaba
+    carrito.splice(ultimaAccion.posicion, 0, ultimaAccion.nombre);  //  vuelve a insertarlo en su posición original.
+  }
+  return true;                                                      //  Devuelve true
 };
 
 // ================================================================
@@ -259,17 +284,37 @@ export const deshacer = (carrito, historial) => {
 // ================================================================
 
 // 6.1 Atiende uno a uno (con atenderSiguiente) todos los pedidos de la
-//     cola. Si puede servirse, actualiza el catálogo con servirPedido y lo
+//     cola. Si puede servirse(puedeServirse), actualiza el catálogo con servirPedido y lo
 //     guarda en servidos; si no, en rechazados. Al terminar la cola queda vacía.
 //     Devuelve { catalogo, servidos, rechazados }
 export const procesarCola = (catalogo, cola) => {
   // Tu código aquí
+ let catalogoActual = [...catalogo];
+  const servidos = [];
+  const rechazados = [];
+
+  while (cola.length > 0) {
+    const pedido = atenderSiguiente(cola)
+
+    if (puedeServirse(catalogoActual, pedido)) {
+      catalogoActual = servirPedido(catalogoActual, pedido);
+      servidos.push(pedido);
+    } else {
+      rechazados.push(pedido);
+    }
+  }
+
+  return { catalogoActual, servidos, rechazados };
 };
 
 // 6.2 Recibe un array de pedidos y devuelve los nombres de los productos
 //     vendidos, SIN repetidos y en orden alfabético.
 export const productosVendidos = (pedidos) => {
   // Tu código aquí
+  return pedidos.map(p => p.lineas.map(l => l.nombre))
+    .flat()
+    .filter((nombre, index, self) => self.indexOf(nombre) === index)
+    .sort((a, b) => a.localeCompare(b, 'es'))
 };
 
 // 6.3 Devuelve un array de textos con una barra por producto:
@@ -277,4 +322,8 @@ export const productosVendidos = (pedidos) => {
 //     Obligatorio: crea la barra con new Array(...).fill('■')
 export const graficoStock = (catalogo) => {
   // Tu código aquí
+  return catalogo.map(p => {
+    let bloques = new Array(p.stock).fill('■').join('')
+    return `${p.nombre}: ${bloques} (${p.stock})`
+  })
 };
