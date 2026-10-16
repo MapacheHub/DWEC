@@ -2,4 +2,12 @@
 // de cursos que pertenezcan a la categoría ‘Desarrollo Web’. Una vez identificadas, debes aplicarles un ligero fondo de color (#f0f0f0) 
 // para que se distingan del resto.
 
-console.log("25.");
+const archivo_25 = document.querySelectorAll('.card')
+archivo_25.forEach(function(curso) {
+    const categoria = curso.querySelector('.categoria');
+    if (categoria.textContent === 'Desarrollo Web') {
+        curso.style.backgroundColor = 'red';
+    }
+}); 
+
+console.log("25.", archivo_25);
