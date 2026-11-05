@@ -1,0 +1,107 @@
+# EJER_04.2
+
+Dos ejercicios que combinan **eventos**, **delegación de eventos**, **lectura de campos `input`** y **métodos de arrays** (`find`, `filter`, `map`, `reduce`, `every`, `sort`). Crea una carpeta con `index.html` y `js/principal.js`, ábrela con *Live Server* (el script se carga como módulo ES6) y usa nombres en español, `const`, `let` y funciones flecha.
+
+---
+
+## Ejercicio 1. Lista de la compra con total
+
+Parte del siguiente HTML y escribe solo el JavaScript.
+
+```html
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Lista de la compra</title>
+  <style>
+    .activo { outline: 2px solid orange; }
+    li { margin: 6px 0; }
+  </style>
+</head>
+<body>
+  <form id="formulario-compra">
+    <input type="text" name="producto" placeholder="Producto" required>
+    <input type="number" name="precio" placeholder="Precio" min="0" step="0.01" required>
+    <input type="number" name="unidades" placeholder="Unidades" min="1" value="1" required>
+    <button type="submit">Añadir</button>
+  </form>
+  <input type="text" id="buscador" placeholder="Buscar producto...">
+  <ul id="lista"></ul>
+  <p id="total"></p>
+  <script type="module" src="js/principal.js"></script>
+</body>
+</html>
+```
+
+### Requisitos
+
+1. **Añadir (`submit`).** Cancela el envío, lee los campos con `formulario.elements` (`value` para el texto, `valueAsNumber` para los números) y guarda cada producto como objeto `{ id, nombre, precio, unidades }` en un array. Después limpia el formulario y devuelve el foco al campo del producto. El campo `id` lo generará el programa secuencialmente:1, 2, 3…
+2. **Sin duplicados.** Si el producto ya existe (sin distinguir mayúsculas), no lo repitas: suma las unidades al existente y prescinde del nuevo precio. Usa `find()`.
+3. **Pintar la lista.** Una función `pintar()` debe generar un listado on los productos debajo del formulario los `<li>` usando un método `map()` sobre el array del punto 1. Cada uno lleva tres botones (`-` ,`+` y `Borrar`) con los atributos `data-accion` para distinguirlos.
+
+!image.png
+
+1. **Delegación de eventos.** Un **único** escuchador `click` en el `<ul>` gestiona los tres botones (usa `closest()` y `dataset`). Borrar se hace con `filter()`, y no se puede bajar de 1 unidad.
+2. **Total.** Muestra «Total: X.XX €» calculado con `reduce()`.
+3. **Buscador.** Con el evento `input`, muestra solo los productos cuyo nombre contenga el texto escrito (`filter()` + `includes()`). El total sigue siendo el de todos los productos.
+4. **Foco.** Con `focusin` y `focusout` en el formulario (un escuchador para cada evento), añade y quita la clase `activo` del campo que tiene el foco.
+
+> **Pistas:** `toFixed(2)` da dos decimales. `data-accion` se lee con `boton.dataset.accion`. Un objeto de acciones `{ sumar: ..., restar: ..., borrar: ... }` evita un `if` largo.
+> 
+
+---
+
+## Ejercicio 2. Notas de clase
+
+Parte del siguiente HTML y escribe solo el JavaScript.
+
+```html
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Notas de clase</title>
+  <style>
+    th[data-orden] { cursor: pointer; }
+    .suspenso { color: darkred; }
+    .aprobado { color: darkgreen; }
+  </style>
+</head>
+<body>
+  <form id="formulario-notas">
+    <input type="text" name="alumno" placeholder="Alumno" required>
+    <input type="number" name="nota" placeholder="Nota (0-10)" min="0" max="10" step="0.1" required>
+    <span id="vista-previa"></span>
+    <button type="submit">Añadir</button>
+  </form>
+  <table id="tabla">
+    <thead>
+      <tr><th data-orden="alumno">Alumno</th><th data-orden="nota">Nota</th><th></th></tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+  <p id="resumen"></p>
+  <script type="module" src="js/principal.js"></script>
+</body>
+</html>
+```
+
+### Requisitos
+
+1. **Vista previa (`input`).** Mientras se escribe la nota, muestra junto al campo «Aprobado» (5 o más) o «Suspenso». Si el campo está vacío, no muestres nada.
+2. **Añadir (`submit`).** Guarda `{ id, alumno, nota }` en un array, limpia el formulario (también la vista previa) y devuelve el foco al nombre. campo `id` lo generará el programa secuencialmente:1, 2, 3…
+3. **Tabla.** Crea una tabla donde agreges los datos a una fila. Pinta las filas con `map()`. Las notas aprobadas en verde (`aprobado`) y las suspensas en rojo (`suspenso`). Agrega por cada fila un botón “Borrar” que la elimine.
+4. **Borrar con delegación.** Un único escuchador `click` en el `<tbody>` borra la fila pulsada con `filter()`.
+5. **Resumen.** Debajo de la tabla muestra: nota media (`reduce()`), mejor alumno (`reduce()`), número de aprobados (`filter()`) y si aprueban todos (`every()`). Con la tabla vacía escribe «Sin alumnos».
+
+!image.png
+
+### Opcional
+
+1. **Ordenar con delegación.** Un único escuchador `click` en el `<thead>` ordena por la columna pulsada con `sort()`. Un segundo clic sobre la misma columna invierte el orden. 
+
+> **Pistas:** para ordenar texto usa `a.alumno.localeCompare(b.alumno)`, y para números `a.nota - b.nota`. Para invertir el orden basta con cambiar el signo del resultado.
+> 
+
+---
