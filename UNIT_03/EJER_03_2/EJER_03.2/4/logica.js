@@ -10,20 +10,28 @@ const usuarios = [
         edad: 30,
     }
 ]
-export function createTable(usuarios){
-    document.createElement('table')
+const tabla = document.createElement('table');
+  const fragmento = document.createDocumentFragment();
+  
+  arrayDatos.forEach(objeto => {
+    const fila = document.createElement('tr');
+    
+    const celdaNombre = document.createElement('td');
+    celdaNombre.textContent = objeto.nombre;
+    fila.appendChild(celdaNombre);
+    
+    const celdaEdad = document.createElement('td');
+    celdaEdad.textContent = objeto.edad;
+    fila.appendChild(celdaEdad);
+    
+    fragmento.appendChild(fila);
+  });
+  
+  tabla.appendChild(fragmento);
+  contenedor.appendChild(tabla);
 
-    const tabla = document.getElementsByClassName('table')
-    usuarios.foreach(persona => {
-        const userTR = document.createElement('tr');
-        tabla.appendChild(userTR);
-        persona.foreach(dato => {
-            const datoTD = document.createElement('td');
-            datoTD.textContent = dato;
-            userTR.appendChild(datoTD);
-        })
-    })            
-}
+
+construirTabla(usuarios);
 
 
 
@@ -41,16 +49,13 @@ export function createTable(usuarios){
 //   const tabla = document.createElement('table');
 //   const fragmento = document.createDocumentFragment();
   
-//   // Crear filas con datos
 //   arrayDatos.forEach(objeto => {
 //     const fila = document.createElement('tr');
     
-//     // Celda Nombre
 //     const celdaNombre = document.createElement('td');
 //     celdaNombre.textContent = objeto.nombre;
 //     fila.appendChild(celdaNombre);
     
-//     // Celda Edad
 //     const celdaEdad = document.createElement('td');
 //     celdaEdad.textContent = objeto.edad;
 //     fila.appendChild(celdaEdad);
@@ -62,5 +67,4 @@ export function createTable(usuarios){
 //   contenedor.appendChild(tabla);
 // }
 
-// // Ejecución de ejemplo
 // construirTabla(usuarios);

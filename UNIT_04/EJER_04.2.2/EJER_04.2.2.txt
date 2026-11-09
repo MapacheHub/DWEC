@@ -1,0 +1,37 @@
+EJER_04.2.2
+Cada ejercicio tiene dos versiones. La inicial es más sencilla: menos campos y menos exigencias. La final parte de tu solución de la inicial y la amplía con más campos, validaciones propias y un módulo reutilizable.
+Ejercicio
+1. Registro de usuario
+2. Reserva de viaje
+Cómo trabajar
+Descarga la carpeta de cada ejercicio que está en el archivo comprimido de arriba. Contiene el index.html ya hecho (no lo modifiques) y los archivos JavaScript con comentarios que indican qué escribir.
+Abre la carpeta con VS Code y lanza la página con Live Server: los módulos ES6 no cargan desde file://.
+Reglas comunes
+Desactiva la validación del navegador desde JavaScript con formulario.noValidate = true. Los mensajes de error los muestras tú, bajo cada campo.
+Bajo cada campo hay un <p class="error" id="error-NOMBRE">, donde NOMBRE es el atributo name del campo. Ahí se escribe el mensaje.
+Un campo con error recibe la clase con-error.
+Los escuchadores se registran en el formulario (delegación de eventos), nunca campo a campo.
+Ejercicio 1.1 · Registro de usuario (versión inicial)
+Campos: usuario (texto), correo, contraseña y casilla de aceptación. Las reglas de validación ya están en el HTML con atributos (required, minlength, maxlength, type="email").
+Requisitos
+Desactiva la validación del navegador con noValidate.
+Escribe una función mostrarError(campo) que:
+copia campo.validationMessage en la zona error-<name del campo>;
+añade o quita la clase con-error según campo.validity.valid;
+devuelve true si el campo es válido y false si no.
+Evento focusout (un único escuchador en el formulario): al salir de un campo, valídalo con mostrarError().
+Evento input (un único escuchador): si el campo que se modifica ya tiene la clase con-error, se revalida mientras el usuario corrige.
+Evento submit: cancela el envío y valida todos los campos. Si hay errores, muestra los mensajes y pon el foco en el primer campo inválido. Si todo es correcto, muestra en el <pre id="resultado"> los datos en JSON (con FormData y Object.fromEntries) sin la contraseña.
+Evento reset: limpia el resultado, las clases y todos los mensajes de error.
+Pistas: formulario.elements es una colección con todos los campos: conviértela en array con Array.from() y filtra los input con filter() y matches('input'). Para saber qué campos fallan, usa filter() con una función que llame a mostrarError() y devuelva lo contrario de lo que esta devuelve. Para quitar la contraseña del objeto, usa delete datos.clave.
+Ejercicio 2.1 · Reserva de viaje (versión inicial)
+Campos: nombre, número de personas, fecha de entrada, fecha de salida y casilla de aceptación. El precio es de 50 € por persona y noche.
+Requisitos
+Desactiva la validación del navegador y fija como fecha mínima de entrada y de salida la de hoy.
+Escribe mostrarError(campo) igual que en el ejercicio 1.1.
+Función comprobarReglas(): con setCustomValidity(), la fecha de salida debe ser posterior a la de entrada.
+Funciones calcularNoches() (resta de fechas) y calcularTotal(). El total estimado, personas × noches × 50, se muestra en #total y se actualiza cada vez que algo cambia.
+Eventos focusout e input en el formulario, como en el ejercicio 1.1. Si cambia la fecha de entrada y ya hay fecha de salida, revalida también la salida.
+Evento submit: valida todos los campos; si hay errores, foco en el primero; si no, escribe en #resultado un resumen de la reserva (nombre, personas, fechas, noches y total) con FormData.
+Evento reset: limpia errores y resultado, y deja el total en 0.00 €.
+Pistas: las noches son la diferencia entre dos fechas en milisegundos dividida entre 86 400 000 (new Date(salida.value) - new Date(entrada.value)). Si falta alguna fecha el resultado es NaN: trátalo como 0 noches. El número de personas se lee con valueAsNumber.

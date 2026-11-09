@@ -1,0 +1,85 @@
+# EJER_04.2.3
+
+Partiremos de los dos ejercicios de la práctic anterior: 04.2.2
+
+| Ejercicio | 04.2.2 | 04.2.3 |
+| --- | --- | --- |
+| 1. Registro de usuario | 1.1 · 4 campos | 1.2 · 9 campos, módulo ES6 y reglas propias |
+| 2. Reserva de viaje | 2.1 · 5 campos | 2.2 · 10 campos, total completo y validación con `invalid` |
+
+## Cómo trabajar
+
+04.2.3.zip
+
+- Descarga la carpeta de cada ejercicio. Contiene el `index.html` ya hecho (**no lo modifiques**) y los archivos JavaScript con comentarios que indican qué escribir.
+- Copia primero en el `registro.js` o `reserva.js` tu solución de la versión inicial (EJER_04.2.2) y amplíala.
+
+## Reglas comunes
+
+- Desactiva la validación del navegador desde JavaScript con `formulario.noValidate = true`. Los mensajes de error los muestras tú, bajo cada campo.
+- Bajo cada campo hay un `<p class="error" id="error-NOMBRE">`, donde `NOMBRE` es el atributo `name` del campo. Ahí se escribe el mensaje.
+- Un campo con error recibe la clase `con-error`.
+- Los escuchadores se registran **en el formulario** (delegación de eventos), nunca campo a campo.
+
+---
+
+## Ejercicio 1.2 · Registro de usuario (versión final)
+
+---
+
+Parte de tu solución del **ejercicio 1.1 de la práctica anterior**. Se amplía el formulario (usa el nuevo `index.html`): usuario con patrón, correo y repetición de correo, contraseña con patrón y repetición, fecha de nacimiento, país (lista desplegable vacía), tipo de cuenta (botones de opción) y casilla de aceptación.
+
+### Parte A. Módulo `js/validaciones.js`
+
+Mueve y mejora tus funciones en un módulo ES6 reutilizable que exporte:
+
+1. `mensajeError(campo)`: devuelve el mensaje **en español** según la causa del error (`valueMissing`, `typeMismatch`, `patternMismatch`, `tooShort`, `tooLong`, `rangeUnderflow`, `rangeOverflow`, `badInput`). Si el error es propio (`customError`), devuelve `campo.validationMessage`. Si el campo es válido, devuelve una cadena vacía. Los mensajes de `valueMissing` deben distinguir casillas, botones de opción y listas.
+2. `mostrarError(campo)`: igual que en 1.1, pero usando `mensajeError().`
+3. `validarFormulario(formulario)`: valida todos los `input`, `select` y `textarea`, pone el foco en el **primer** campo inválido y devuelve `true` solo si no hay ningún error.
+4. `limpiarErrores(formulario)`: borra mensajes, clases y errores propios (`setCustomValidity('')`).
+
+### Parte B. Script `js/registro.js`
+
+1. Importa las funciones del módulo y sustituye las que tenías en 1.1.
+2. Rellena la lista de países desde un array (España, Francia, Italia y Portugal) con `new Option()`, y fija como fecha máxima de nacimiento la de hoy.
+3. Reglas propias con `setCustomValidity()`, en una función `comprobarReglas()`:
+    - el segundo correo debe coincidir con el primero;
+    - la segunda contraseña debe coincidir con la primera;
+    - el usuario debe ser **mayor de edad** según su fecha de nacimiento (ten en cuenta el mes y el día).
+    
+    > **Ayuda para calcular la edad:**
+    > 
+    > 1. Convierte el texto del campo (por ejemplo, `'2008-03-15'`) en una fecha con `new Date(texto)`, y obtén la fecha de hoy con `new Date()`.
+    > 2. Resta los años: `hoy.getFullYear() - nacimiento.getFullYear()`.
+    > 3. Ese resultado es correcto solo si ya ha pasado el cumpleaños de este año. Si todavía no ha llegado, hay que restar 1. Esto ocurre cuando el mes actual es menor que el mes de nacimiento (`getMonth()`, de 0 a 11), o cuando es el mismo mes pero el día actual es menor que el día de nacimiento (`getDate()`).
+    > 4. Con la edad calculada, comprueba si es mayor o igual que 18.
+    > 
+    > *Ejemplo:* hoy es 10 de marzo de 2026 y alguien nació el 15 de marzo de 2008. La resta de años da 18, pero como es el mismo mes y el día 10 es menor que el 15, aún no ha cumplido años: tiene 17 y no es mayor de edad.
+    > 
+4. Llama a `comprobarReglas()` en los eventos `focusout`, `input` y `submit`.
+5. Evento `input`: además de lo que ya hacías, si hay algo escrito en «Repite el correo» o «Repite la contraseña», se revalidan también, porque dependen de otro campo.
+6. Evento `reset`: usa `limpiarErrores()`.
+
+> **Pistas:** para saber qué causa ha fallado, recorre las claves de un objeto de mensajes con `find()` y consulta `campo.validity[clave]`. El evento `reset` se produce **antes** de restablecer los valores, y un error propio sigue activo hasta que lo quitas con `setCustomValidity('')`.
+> 
+
+---
+
+## Ejercicio 2.2 · Reserva de viaje (versión final)
+
+Parte de tu solución del **ejercicio 2.1 de la práctica anterior**.  Se amplía el formulario (usa el nuevo `index.html`): además de los anteriores, teléfono, habitación (botones de opción), actividades (lista de selección múltiple), extras (casillas) y comentarios (área de texto). Reutiliza el módulo `js/validaciones.js` del ejercicio 1.2 (cópialo a la carpeta `js/` de este ejercicio) y elimina de tu código la función `mostrarError()`.
+
+### Requisitos
+
+1. Importa `mostrarError` y `limpiarErrores` del módulo.
+2. `comprobarReglas()`: además de la salida posterior a la entrada, se pueden elegir como máximo **3 actividades** (usa `selectedOptions`).
+3. **Total estimado en directo.** El nuevo cálculo es `(precio de la habitación + suma de extras × personas) × noches`. Usa `Array.from()` con función de transformación sobre las casillas marcadas y `reduce()` para sumar. El precio de la habitación se lee con `formulario.elements.habitacion.value` y el de cada extra, del atributo `data-precio`.
+4. **Contador** de caracteres del área de comentarios («n/120»).
+5. Validación con delegación:
+    - `focusout` e `input`, como antes;
+    - `invalid` **capturado** (tercer parámetro `true`): al llamar a `checkValidity()` muestra el error de cada campo inválido.
+6. Evento `submit`: cancela el envío, comprueba las reglas y llama a `formulario.checkValidity()`. Si falla, pon el foco en el primer campo inválido con `querySelector(':invalid')`. Si todo es correcto, escribe en `#resultado` un resumen de la reserva con `FormData` (`get()` y `getAll()`), indicando «ninguno» si no hay extras.
+7. Evento `reset`: limpia errores y resultado, deja el total en 0.00 € y el contador en 0.
+
+> **Pistas:** `invalid` no burbujea, por eso hay que capturarlo en el contenedor. Con `fieldset` como contenedor, `:invalid` también coincide con el propio `fieldset`: busca solo `input:invalid, select:invalid, textarea:invalid`. Una lista `multiple` con `required` ya da `valueMissing` si no hay nada seleccionado.
+>

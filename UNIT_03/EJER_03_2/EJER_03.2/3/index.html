@@ -6,13 +6,18 @@
     <title>3. Informe de Validación de Formulario</title>
 </head>
 <body>
-    <form>
-        <laber for="nombre">Nombre</laber>
-        <input type="text" id="nombre">
 
-        <laber for="correo">correo</laber>
-        <input type="email" id="correo">
+    <form id="formulario">
+        <laber>Nombre</laber>
+        <input type="text" id="nombre" required>
+
+        <laber>correo</laber>
+        <input type="text" id="correo" required>
+
         <div id="informe-errores"></div>
+        <button type="submit">Enviar</button>
     </form>
+    
+    <script src="logica.js"></script>
 </body>
 </html>
