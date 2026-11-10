@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>6. Pestañas de contenido</title>
+    <style>
+        .oculto {display: none;}
+    </style>
+</head>
+<body>
+    <!-- **1.** Asigna un `data-id` a cada botón de pestaña que se corresponda con el `id` del `div` de contenido que debe mostrar. -->
+    <div id="botonesOpciones">
+        <button class="tab-bot" data-id="html-info">HTML</button>
+        <button class="tab-bot" data-id="css-info">CSS</button>
+        <button class="tab-bot" data-id="js-info">JS</button>
+    </div>
+
+    <div id="opcionesTexto">
+        <div id="html-info" class="contenido-tab oculto">Contenido estructurado con etiquetas HTML.</div>
+        <div id="css-info" class="contenido-tab oculto">Estilos visuales e interfaces con CSS.</div>
+        <div id="js-info" class="contenido-tab oculto">Comportamiento interactivo programado con JavaScript.</div>
+    </div>
+    <script src="logica.js"></script>
+</body>
+</html>
