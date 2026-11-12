@@ -1,0 +1,303 @@
+## Cómo trabajar
+
+Son 10 ejercicios cortos y un reto opcional, que se resuelven con Node.js y sin servidor, usando lo visto en los ejemplos de `EJEM_05.1`.
+
+1. Crea una carpeta `ejercicios` con un archivo por ejercicio: `ej01.js`, `ej02.js`…
+2. Copia en ella el `package.json` de los ejemplos (contiene `"type": "module"`).
+3. Ejecuta cada archivo con `node ej01.js` (Node.js 22 o superior).
+4. Antes de ejecutar, **predice** qué saldrá por consola; después comprueba si acertaste.
+5. Escribe tus respuestas en un archivo README.md
+
+| Nº | Ejercicio | Apartado del tema |
+| --- | --- | --- |
+| 1 | Predice la salida | try / catch / finally |
+| 2 | Dividir con seguridad | throw |
+| 3 | Detective de JSON | Sintaxis de JSON |
+| 4 | Ida y vuelta | stringify y parse |
+| 5 | Validador de alumnos | Validar datos externos |
+| 6 | La lista de la compra | Copiar objetos |
+| 7 | Adivina el orden | setTimeout |
+| 8 | Comprobar el stock | Promesas |
+| 9 | Buscar varios libros | async / await |
+| 10 | Más rápido | Promise.all |
+| Reto | Informe de libros | Todo el tema |
+
+Los ejercicios 9 y 10 y el reto usan el «servidor» simulado de los ejemplos. Cópialo al principio de tu archivo:
+
+```jsx
+const titulos = {
+  1: 'El nombre de la rosa',
+  2: 'Cien años de soledad',
+  3: 'Fahrenheit 451',
+};
+
+const buscarLibro = (id) =>
+  new Promise((resolver, rechazar) => {
+    setTimeout(() => {
+      if (titulos[id]) resolver({ id, titulo: titulos[id] });
+      else rechazar(new Error(`No existe ningún libro con id${id}`));
+    }, 500);
+  });
+```
+
+Si te atascas, vuelve al ejemplo del apartado indicado en cada ejercicio.
+
+## Bloque 1 · Errores
+
+### Ejercicio 1 · Predice la salida ★
+
+Apartado: try / catch / finally (ejemplo 01). Copia este código en `ej01.js`:
+
+```jsx
+console.log('Inicio');
+try {
+  console.log('Dentro del try 1');
+  console.log(total);
+  console.log('Dentro del try 2');
+} catch (error) {
+  console.log('Capturado:', error.name);
+} finally {
+  console.log('Limpieza');
+}
+console.log('Fin');
+```
+
+1. Sin ejecutarlo, escribe en un papel las líneas que saldrán por consola y en qué orden.
+2. Ejecútalo y compara. ¿Qué línea del `try` no llega a ejecutarse? ¿Por qué `Fin` sí aparece?
+3. Añade `const total = 0;` justo antes del `try` y vuelve a predecir la salida. ¿Sigue ejecutándose el `finally`?
+
+### Ejercicio 2 · Dividir con seguridad ★
+
+Apartado: lanzar errores con `throw`.
+
+Escribe una función `dividir(a, b)` que devuelva `a / b`, pero que lance un `RangeError` con el mensaje `No se puede dividir entre cero` cuando `b` valga 0. Después recorre este array con un bucle `for...of` y muestra el resultado de cada división dentro de un `try / catch / finally`:
+
+```jsx
+const operaciones = [[10, 2], [5, 0], [7, 4]];
+```
+
+Cada vuelta debe terminar con la línea `Operación terminada`, escrita en el `finally`. Salida esperada:
+
+```
+10 / 2 = 5
+Operación terminada
+RangeError: No se puede dividir entre cero
+Operación terminada
+7 / 4 = 1.75
+Operación terminada
+```
+
+Pista: con `for (const [a, b] of operaciones)` obtienes cada pareja separada en `a` y `b`; también puedes usar `pareja[0]` y `pareja[1]`.
+
+## Bloque 2 · JSON
+
+### Ejercicio 3 · Detective de JSON ★
+
+Apartado: sintaxis de JSON (ejemplo 02). Copia este array en `ej03.js`:
+
+```jsx
+const textos = [
+  '{"nombre":"Ana","edad":19}',
+  "{'nombre':'Luis'}",
+  '{"activo":true,}',
+  '[1, 2, 3]',
+  '{nombre:"Marta"}',
+  '{"curso":"2DAW"',
+];
+```
+
+1. Sin ejecutar nada, anota qué textos son JSON válido y, en los que no lo son, qué regla incumplen.
+2. Escribe un bucle `for...of` que pruebe cada texto con `JSON.parse` dentro de un `try / catch` y muestre `✔ texto → tipo` si es válido (usa `typeof`) o `✘ texto → nombre del error` si no lo es.
+3. Escribe en otro array las versiones corregidas de los textos inválidos y comprueba que ahora todos pasan la prueba.
+
+### Ejercicio 4 · Ida y vuelta ★★
+
+Apartado: `JSON.stringify` y `JSON.parse` (ejemplo 03). Parte de este objeto:
+
+```jsx
+const mascota = {
+  nombre: 'Luna',
+  edad: 3,
+  vacunada: true,
+  vacunas: ['rabia', 'moquillo'],
+  apodo: undefined,
+  fechaAlta: new Date('2026-09-01T10:00:00Z'),
+};
+```
+
+1. Convierte `mascota` a texto JSON y muéstralo.
+2. Muéstralo otra vez con una sangría de 2 espacios.
+3. Muéstralo con solo las propiedades `nombre` y `edad`. Debe salir `{"nombre":"Luna","edad":3}`.
+4. Convierte el texto del paso 1 otra vez en objeto y muestra `vacunas[0]` y el `typeof` de `fechaAlta`.
+5. Responde con tus palabras: ¿por qué no aparece `apodo` en el texto? ¿Por qué `fechaAlta` ya no es una fecha al volver?
+
+### Ejercicio 5 · Validador de alumnos ★★
+
+Apartado: no te fíes de los datos externos (ejemplo 05).
+
+Escribe una función `esAlumnoValido(texto)` que reciba un texto y devuelva `true` solo si cumple todo esto:
+
+- Es JSON válido (si `JSON.parse` falla, devuelve `false`).
+- Es un objeto (no `null`).
+- Tiene `nombre`, un texto que no está vacío.
+- Tiene `nota`, un número entre 0 y 10.
+
+Pruébala con estas entradas:
+
+```jsx
+const entradas = [
+  '{"nombre":"Ana","nota":8.5}',
+  '{"nombre":"Luis","nota":"9"}',
+  '{"nombre":"","nota":7}',
+  '{"nombre":"Marta","nota":11}',
+  '{"nombre":"Pablo","nota":6',
+  'null',
+];
+```
+
+Solo la primera debe ser aceptada. Salida esperada:
+
+```
+✔ aceptado  {"nombre":"Ana","nota":8.5}
+✘ rechazado {"nombre":"Luis","nota":"9"}
+✘ rechazado {"nombre":"","nota":7}
+✘ rechazado {"nombre":"Marta","nota":11}
+✘ rechazado {"nombre":"Pablo","nota":6
+✘ rechazado null
+```
+
+Pista: usa `return false` en cuanto una comprobación falle, como en el ejemplo 05. Cuidado con la última entrada: `JSON.parse('null')` es válido, pero no devuelve un objeto.
+
+## Bloque 3 · Copiar objetos
+
+### Ejercicio 6 · La lista de la compra ★★
+
+Apartado: igualar, copia superficial y copia profunda (ejemplo 04). Usa esta función para crear un objeto nuevo en cada apartado, así no se mezclan:
+
+```jsx
+const nuevaLista = () => ({ propietario: 'Ana', productos: ['pan', 'leche'] });
+```
+
+- **A) Igualar.** Crea `lista1 = nuevaLista()` y `igual = lista1`. Añade `'huevos'` a `igual.productos`. Muestra `lista1.productos` y el resultado de `lista1 === igual`.
+- **B) Copia superficial.** Crea `lista2 = nuevaLista()` y `superficial = { ...lista2 }`. Cambia el propietario de la copia a `'Luis'` y añade `'queso'` a sus productos. Muestra el propietario y los productos del **original**.
+- **C) Copia profunda.** Crea `lista3 = nuevaLista()` y `profunda = structuredClone(lista3)`. Cambia el propietario de la copia a `'Marta'` y añade `'fruta'` a sus productos. Muestra el original y la copia.
+
+Antes de ejecutar, predice en cada apartado si el original cambia. Después responde:
+
+1. En el apartado B, ¿por qué el propietario del original no cambió pero sus productos sí?
+2. Si la lista solo tuviera textos y números, sin arrays dentro, ¿qué copia usarías?
+
+## Bloque 4 · Asincronía
+
+### Ejercicio 7 · Adivina el orden ★
+
+Apartado: `setTimeout` (ejemplo 07). Copia este código en `ej07.js`:
+
+```jsx
+console.log('1. Salgo de casa');
+setTimeout(() => console.log('2. Llego al supermercado (500 ms)'), 500);
+console.log('3. Cojo el carro');
+setTimeout(() => console.log('4. Pago en caja (0 ms)'), 0);
+setTimeout(() => console.log('5. Vuelvo a casa (1000 ms)'), 1000);
+console.log('6. Hago la lista');
+```
+
+1. Escribe en qué orden saldrán los números del 1 al 6 y ejecuta para comprobarlo.
+2. Cambia los `0` ms de la caja por `1500` ms. Predice el nuevo orden y vuelve a ejecutar.
+3. Explica con tus palabras por qué el número 6 sale antes que el 4, aunque el 4 tenga 0 ms.
+
+### Ejercicio 8 · Comprobar el stock ★★
+
+Apartado: crear y usar promesas (ejemplo 08).
+
+Escribe una función `comprobarStock(unidades)` que devuelva una promesa. Pasado 1 segundo (`setTimeout` de 1000 ms):
+
+- si `unidades` es mayor que 0, la promesa se **cumple** con el texto `Quedan N unidades`;
+- si no, se **rechaza** con `new Error('Producto agotado')`.
+
+Llámala dos veces, con 5 y con 0, y trata cada resultado con `then`, `catch` y `finally`. Justo antes de cada llamada escribe `Consulta enviada: N unidades`. Salida esperada:
+
+```
+Consulta enviada: 5 unidades
+Consulta enviada: 0 unidades
+✔ Quedan 5 unidades
+Consulta terminada
+✘ Producto agotado
+Consulta terminada
+```
+
+Pregunta: ¿por qué las dos líneas `Consulta enviada` salen antes que los resultados?
+
+### Ejercicio 9 · Buscar varios libros ★★
+
+Apartado: `async` / `await` (ejemplo 09). Copia al principio del archivo la función `buscarLibro` de la introducción.
+
+Escribe una función `async` llamada `mostrarTitulos(ids)` que recorra el array con `for...of` y espere cada libro con `await`. Si el libro existe, escribe `id: título`; si no, escribe `id: ✘ mensaje del error`. Pon el `try / catch` **dentro** del bucle, para que un fallo no detenga las búsquedas siguientes. Al terminar escribe `Fin de la búsqueda`. Llámala así:
+
+```jsx
+await mostrarTitulos([1, 99, 2, 3]);
+```
+
+Salida esperada (tarda unos 2 segundos):
+
+```
+1: El nombre de la rosa
+99: ✘ No existe ningún libro con id 99
+2: Cien años de soledad
+3: Fahrenheit 451
+Fin de la búsqueda
+```
+
+### Ejercicio 10 · Más rápido ★★★
+
+Apartado: varias promesas a la vez (ejemplo 10). Reutiliza `buscarLibro` y añade esta ayuda para medir el tiempo:
+
+```jsx
+const segundosDesde = (inicio) => ((Date.now() - inicio) / 1000).toFixed(1);
+```
+
+1. Pide los libros 1, 2 y 3 con tres `await` seguidos y muestra cuánto tarda.
+2. Pide los mismos tres libros a la vez con `Promise.all` y muestra cuánto tarda.
+3. Con `Promise.allSettled`, pide los libros 1, 99 y 3 y cuenta cuántas promesas se cumplieron y cuántas se rechazaron.
+
+Salida esperada (los tiempos pueden variar una décima):
+
+```
+Una detrás de otra: 1.5 s
+Con Promise.all: 0.5 s
+allSettled: 2 cumplidas y 1 rechazada
+```
+
+Pista: cada resultado de `allSettled` tiene una propiedad `status` que vale `'fulfilled'` o `'rejected'`.
+
+## Reto final (opcional)
+
+### Informe de libros ★★★
+
+Une JSON, errores y promesas. Parte de esta lista de ids, escrita en formato JSON, y de la función `buscarLibro` de la introducción:
+
+```jsx
+const textoIds = '[3, 1, 99, 2]';
+```
+
+Escribe un programa que:
+
+1. Convierta `textoIds` en un array con `JSON.parse`, dentro de un `try / catch`. Si falla, que escriba un mensaje y termine.
+2. Pida todos los libros a la vez con `Promise.allSettled`.
+3. Escriba una línea por libro: `✔ id · título` si existe o `✘ id · mensaje del error` si no.
+4. Termine con una línea de resumen. Salida esperada:
+
+```
+✔ 3 · Fahrenheit 451
+✔ 1 · El nombre de la rosa
+✘ 99 · No existe ningún libro con id 99
+✔ 2 · Cien años de soledad
+3 encontrados y 1 no existen
+```
+
+Pista: `ids.map((id) => buscarLibro(id))` crea el array de promesas, y el resultado número *i* de `allSettled` corresponde al id número *i*.
+
+## Antes de entregar comprueba:
+
+- [ ]  Ningún `catch` está vacío: cada uno hace algo útil.
+- [ ]  He respondido por escrito las preguntas de los ejercicios 1, 4, 6, 7 y 8.
