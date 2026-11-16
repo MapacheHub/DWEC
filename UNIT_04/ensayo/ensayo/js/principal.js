@@ -393,6 +393,66 @@ const archivarHechas = () => {
 // 4.4 · Eventos del tablero, del buscador y del botón «Archivar hechas», y primer pintado
 // TU CÓDIGO AQUÍ
 
+tablero.addEventListener('click', (evento) => {
+  const boton = evento.target.closest('button[data-accion]');
+  if (!boton) return;
+
+  const tarjeta = boton.closest('.tarjeta');
+  if (!tarjeta) return;
+
+  const id = Number(tarjeta.dataset.id);
+  const paso = boton.dataset.accion === 'avanzar' ? 1 : -1;
+
+  moverTarea(id, paso);
+  repintar();
+});
+
+buscador.addEventListener('input', () => {
+  repintar();
+});
+
+botonArchivar.addEventListener('click', () => {
+  archivarHechas();
+  repintar();
+});
+
+repintar();
 
 // 4.5 · Envío del formulario
 // TU CÓDIGO AQUÍ
+
+formularioTarea.addEventListener('submit', (evento) => {
+  evento.preventDefault();
+  comprobarHoras();
+
+  const campos = Array.from(formularioTarea.elements).filter((el) => el.name);
+  let primerInvalido = null;
+
+  for (const campo of campos) {
+    const esValido = validarCampo(campo);
+    if (!esValido && !primerInvalido) {
+      primerInvalido = campo;
+    }
+  }
+
+  if (primerInvalido) {
+    primerInvalido.focus();
+    return;
+  }
+
+  const tituloLimpio = formularioTarea.elements.titulo.value.trim();
+  const asignatura = formularioTarea.elements.asignatura.value;
+  const horas = Number(campoHoras.value);
+  const prioridad = formularioTarea.elements.prioridad.value;
+
+  anadirTarea({
+    titulo: tituloLimpio,
+    asignatura,
+    horas,
+    prioridad
+  });
+
+  limpiarFormulario();
+  repintar();
+  mensajeFormulario.textContent = `Tarea añadida: ${tituloLimpio}`;
+});
