@@ -393,6 +393,7 @@ const archivarHechas = () => {
 // 4.4 · Eventos del tablero, del buscador y del botón «Archivar hechas», y primer pintado
 // TU CÓDIGO AQUÍ
 
+// Un único click en #tablero que, con evento.target.closest('button[data-accion]'), detecta si se pulsó uno de los botones de las tarjetas.
 tablero.addEventListener('click', (evento) => {
   const boton = evento.target.closest('button[data-accion]');
   if (!boton) return;
@@ -400,6 +401,7 @@ tablero.addEventListener('click', (evento) => {
   const tarjeta = boton.closest('.tarjeta');
   if (!tarjeta) return;
 
+  // Si es así, obtiene el id de su tarjeta (ojo: dataset devuelve texto), mueve la tarea +1 si la acción es avanzar o -1 si es retroceder, y repinta.
   const id = Number(tarjeta.dataset.id);
   const paso = boton.dataset.accion === 'avanzar' ? 1 : -1;
 
@@ -407,24 +409,33 @@ tablero.addEventListener('click', (evento) => {
   repintar();
 });
 
+// input del buscador: repinta.
 buscador.addEventListener('input', () => {
   repintar();
 });
 
+// click de #boton-archivar: archiva las hechas y repinta.
 botonArchivar.addEventListener('click', () => {
   archivarHechas();
   repintar();
 });
 
+// Primer pintado: llama a repintar() al arrancar la página
 repintar();
 
 // 4.5 · Envío del formulario
 // TU CÓDIGO AQUÍ
 
+// Al enviar el formulario:
 formularioTarea.addEventListener('submit', (evento) => {
+
+  // Se evita el envío real de la página
   evento.preventDefault();
+
+  // Se comprueba el límite de horas.
   comprobarHoras();
 
+  // Se validan todos los campos y se muestran todos los errores a la vez.
   const campos = Array.from(formularioTarea.elements).filter((el) => el.name);
   let primerInvalido = null;
 
@@ -435,6 +446,7 @@ formularioTarea.addEventListener('submit', (evento) => {
     }
   }
 
+  // Si hay algún error, el foco va al primer campo inválido y no se hace nada más
   if (primerInvalido) {
     primerInvalido.focus();
     return;
@@ -445,6 +457,7 @@ formularioTarea.addEventListener('submit', (evento) => {
   const horas = Number(campoHoras.value);
   const prioridad = formularioTarea.elements.prioridad.value;
 
+  // Si todo es correcto, se añade la tarea (con el título sin espacios sobrantes y las horas como número), se limpia el formulario y se repinta.
   anadirTarea({
     titulo: tituloLimpio,
     asignatura,
@@ -454,5 +467,7 @@ formularioTarea.addEventListener('submit', (evento) => {
 
   limpiarFormulario();
   repintar();
+
+  // En #mensaje-formulario aparece Tarea añadida: TÍTULO, con el título ya sin espacios sobrantes.
   mensajeFormulario.textContent = `Tarea añadida: ${tituloLimpio}`;
 });
