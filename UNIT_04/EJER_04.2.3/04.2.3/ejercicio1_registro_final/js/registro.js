@@ -1,84 +1,64 @@
-// / Ejercicio 1.1 · Registro de usuario (versión inicial)
+// Ejercicio 1.2 · Registro de usuario (versión final)
+// Copia aquí tu solución del ejercicio 1.1 y amplíala siguiendo el enunciado.
+// import { mostrarError, validarFormulario, limpiarErrores } from './validaciones.js';
+
+import { mostrarError, validarFormulario, limpiarErrores } from './validaciones.js';
 const formulario = document.getElementById('registro');
 const resultado = document.getElementById('resultado');
 
-// 1. Desactivar la validación del navegador (noValidate)
+//Desactivar la validación del navegador (noValidate)
 formulario.noValidate = true;
 
-// 2. Función mostrarError(campo): escribe campo.validationMessage en #error-<name>,
-//    activa o quita la clase 'con-error' y devuelve true si el campo es válido
-function mostrarError(campo) {
-  const esValido = campo.validity.valid;
-  const spanError = document.getElementById(`error-${campo.name}`);
+//Evento focusout: valida el campo que pierde el foco
 
-  if (spanError) {
-    spanError.textContent = campo.validationMessage;
-  }
-
-  campo.classList.toggle('con-error', !esValido);
-
-  return esValido;
-}
-
-// 3. Evento focusout en el formulario: valida el campo que se abandona
 formulario.addEventListener('focusout', (evento) => {
-  const campo = evento.target;
-  // Ignoramos botones (submit, reset, button)
-  if (!campo.name || campo.type === 'submit' || campo.type === 'reset') return;
+    const campo = evento.target;
 
-  mostrarError(campo);
-});
+    if (campo.matches('input, select, textarea')) {
+        mostrarError(campo);
+    }
+})
 
-// 4. Evento input en el formulario: si el campo ya tenía error, se revalida
+//Evento input: revalida campos que ya tenían errores
+
 formulario.addEventListener('input', (evento) => {
-  const campo = evento.target;
-  if (!campo.name) return;
+    const campo = evento.target;
+    if (campo.matches('input, select, textarea') && campo.classList.contains('con-error')) {
+        mostrarError(campo);
+    }
+})
 
-  // Revalidamos si ya estaba marcado con error (o si es un checkbox que se acaba de marcar)
-  if (campo.classList.contains('con-error') || campo.type === 'checkbox') {
-    mostrarError(campo);
-  }
-});
+// Evento change: permite actualizar también selects y radios
 
-// 5. Evento submit: valida todos los campos; si hay errores, foco en el primero;
-//    si no, muestra los datos en JSON sin la contraseña
+formulario.addEventListener('change', (evento) => {
+    const campo = evento.target;
+    if (campo.matches('input, select, textarea') && campo.classList.contains('con-error')) {
+        mostrarError(campo);
+    }
+})
+
+// Evento submit: valida y muestra los datos
+
 formulario.addEventListener('submit', (evento) => {
-  evento.preventDefault();
+    evento.preventDefault();
 
-  // Obtenemos todos los campos con atributo 'name' del formulario
-  const campos = Array.from(formulario.elements).filter((el) => el.name);
-  let primerInvalido = null;
-
-  campos.forEach((campo) => {
-    const esValido = mostrarError(campo);
-    if (!esValido && !primerInvalido) {
-      primerInvalido = campo;
+    if (!validarFormulario(formulario)) {
+        return;
     }
-  });
+    const datos = Object.fromEntries(new FormData(formulario));
 
-  if (primerInvalido) {
-    primerInvalido.focus();
+    //Con esto no se muestra la contraseña
+    delete datos.clave;
+
+    resultado.textContent = JSON.stringify(datos, null, 2)
+})
+
+// Evento reset: limpia errores y resultado
+
+formulario, addEventListener('reset', (evento) => {
     resultado.textContent = '';
-    return;
-  }
-
-  // Construimos el objeto de datos a partir de FormData y eliminamos la contraseña
-  const datos = Object.fromEntries(new FormData(formulario));
-  delete datos.contrasena; // Ajusta el nombre si el input en HTML tiene otro 'name' (ej. datos.password)
-
-  resultado.textContent = JSON.stringify(datos, null, 2);
-});
-
-// 6. Evento reset: limpia el resultado y todos los errores
-formulario.addEventListener('reset', () => {
-  resultado.textContent = '';
-
-  const campos = Array.from(formulario.elements).filter((el) => el.name);
-  campos.forEach((campo) => {
-    campo.classList.remove('con-error');
-    const spanError = document.getElementById(`error-${campo.name}`);
-    if (spanError) {
-      spanError.textContent = '';
-    }
-  });
-});
+    // Esperar a que el navegador restablezca los valores
+    setTimeout(() => {
+        limpiarErrores(formulario)
+    }, 0);
+})
