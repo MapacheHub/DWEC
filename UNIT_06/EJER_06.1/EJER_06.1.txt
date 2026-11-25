@@ -1,0 +1,260 @@
+# 🛠️ A. Comparando Métodos de Array
+
+### **Contexto Inicial para Todos los Ejercicios**
+
+Usaremos una lista de libros.
+
+```jsx
+const libros = [
+  { titulo: "Cien años de soledad", autor: "García Márquez", paginas: 410, categoria: "Ficción", precio: 25.00 },
+  { titulo: "El poder del ahora", autor: "Eckhart Tolle", paginas: 235, categoria: "Autoayuda", precio: 15.50 },
+  { titulo: "El código Da Vinci", autor: "Dan Brown", paginas: 689, categoria: "Misterio", precio: 12.75 },
+  { titulo: "1984", autor: "George Orwell", paginas: 328, categoria: "Ficción", precio: 18.00 },
+  { titulo: "Sapiens", autor: "Yuval Noah Harari", paginas: 498, categoria: "Historia", precio: 30.00 }
+];
+```
+
+---
+
+## 🎯 Bloque 1: Iteración y Transformación
+
+### Ejercicio 1.1: El Clásico (**.forEach()**)
+
+**Tarea:** Recorre el *array* `libros` y **muestra en la consola** un mensaje para cada uno que diga: `"El libro [TITULO] tiene [PAGINAS] páginas."`
+
+**Requisito:** Solo se necesita imprimir. No se debe crear ni devolver un nuevo *array*.
+
+💡 Pista
+Usa una Arrow Function dentro del `.forEach()`
+
+### Ejercicio 1.2: La Conversión (**.map()**)
+
+**Tarea:** Crea un **nuevo *array*** llamado `titulosYAutores` que contenga objetos, pero que **solo incluyan** las propiedades `titulo` y `autor` de cada libro.
+
+**Requisito:** El resultado debe ser un nuevo *array* de 5 elementos.
+💡 Pista
+Asegúrate de que la función `.map()` devuelva el nuevo objeto `{ titulo, autor }`
+
+---
+
+## 🔍 Bloque 2: Filtrado y Búsqueda
+
+### Ejercicio 2.1: El Buscador de Género (**.filter()**)
+
+**Tarea:** Crea un **nuevo *array*** llamado `librosDeFiccion` que contenga **solo** los objetos de los libros cuya `categoria` sea `"Ficción"`.
+
+**Requisito:** El *array* resultante debe tener menos elementos que el original (solo 2).
+
+💡 Pista
+La función debe devolver `true` o `false` para indicar si el elemento pasa o no el filtro.
+
+### Ejercicio 2.2: El Buscador Rápido (**.find()**)
+
+**Tarea:** Encuentra y almacena en la variable `libroBarato` el **primer libro** que tenga un `precio` **menor o igual a 15.00**.
+
+**Requisito:** El resultado debe ser un **único objeto**, no un *array*.
+
+💡 Pista
+Este método deja de iterar tan pronto como encuentra el primer match.
+
+---
+
+## 📈 Bloque 3: Acumulación y Condición
+
+### Ejercicio 3.1: El Acumulador de Páginas (**.reduce()**)
+
+**Tarea:** Calcula la **suma total** de las páginas de todos los libros en el *array* y almacena el resultado en la variable `totalPaginas`.
+
+**Requisito:** Usa el segundo argumento de `.reduce()` para establecer el valor inicial del acumulador en `0`.
+
+💡 Pista
+El acumulador (el primer parámetro) debe sumar la propiedad `paginas` del elemento actual (el segundo parámetro).
+
+### Ejercicio 3.2: El Validador (**.every()** y **.some()**)
+
+**Tarea A (**.every()**):** Comprueba si **TODOS** los libros tienen más de 200 páginas. Almacena el resultado en `todosSonLargos`.
+
+**Tarea B (**.some()**):** Comprueba si **AL MENOS UNO** de los libros tiene un precio superior a 28.00. Almacena el resultado en `algunoEsCaro`.
+
+💡 Pista
+Estos métodos devuelven un valor booleano (`true` o `false`).
+
+---
+
+## 🔗 Bloque 4: La Prueba Final (Encadenamiento)
+
+### Ejercicio 4.1: Encadenando el Flujo
+
+**Tarea:** Realiza las siguientes tres operaciones en una sola línea de código, usando encadenamiento:
+
+1. **Filtra** los libros que tengan **más de 400 páginas**.
+2. **Mapea** el resultado para obtener **solo** el `titulo` de esos libros.
+3. **Une** (con `.join()`) esos títulos en una sola cadena de texto separada por `" | "` (espacio, barra vertical, espacio).
+
+**Requisito:** La variable `resultadoCadena` debe ser un *string*.
+
+💡 Pista
+El orden de los métodos es crucial: `.filter()` → `.map()` → `.join()`
+
+# 🛠️ B. Ejercicios CRUD sobre Arrays (Inmutabilidad)
+
+Simular las operaciones CRUD (*Create, Read, Update, Delete*) sobre un *array* es una forma muy práctica de cómo manipular colecciones de datos en JavaScript, que es la base de cualquier aplicación moderna.
+
+En el desarrollo moderno de JavaScript, especialmente con frameworks, la clave es realizar estas operaciones **sin mutar** el *array* original, lo que se conoce como **Inmutabilidad**.
+
+### **Contexto Inicial para Todos los Ejercicios**
+
+Usaremos una lista simple de tareas (TO-DOs).
+
+```jsx
+const tareas = [
+  { id: 1, descripcion: "Comprar suministros de oficina", completada: false },
+  { id: 2, descripcion: "Revisar código del proyecto Beta", completada: true },
+  { id: 3, descripcion: "Planificar reunión semanal", completada: false },
+  { id: 4, descripcion: "Responder correos urgentes", completada: false }
+];
+```
+
+---
+
+## ➕ 1. Crear (CREATE)
+
+Simular añadir un nuevo elemento al *array*.
+
+### Ejercicio 1.1: Añadir al Final
+
+**Tarea:** Crea un **nuevo *array*** llamado `tareasConNueva` que incluya todas las tareas originales más una nueva tarea al final:
+
+```jsx
+{ id: 5, descripcion: "Investigar nueva librería JS", completada: false }
+```
+
+**Método a usar:** El operador *spread* (`...`) combinado con un literal de *array*.
+
+---
+
+## 👁️ 2. Leer (READ)
+
+Simular obtener datos de forma selectiva.
+
+### Ejercicio 2.1: Leer Tareas Pendientes
+
+**Tarea:** Crea un **nuevo *array*** llamado `pendientes` que contenga **solo** las tareas cuya propiedad `completada` sea `false`.
+
+**Método a usar:** `.filter()`
+
+### Ejercicio 2.2: Leer una Tarea Específica
+
+**Tarea:** Encuentra el objeto de la tarea con `id: 3` y almacénala en la variable `tareaEspecifica`.
+
+**Método a usar:** `.find()`
+
+---
+
+## ✏️ 3. Actualizar (UPDATE)
+
+Simular la modificación de un elemento específico, pero manteniendo la inmutabilidad.
+
+### Ejercicio 3.1: Marcar como Completada
+
+**Tarea:** Crea un **nuevo *array*** llamado `tareasActualizadas` en el que la tarea con `id: 4` (`"Responder correos urgentes"`) se modifique para que `completada` sea `true`.
+
+**Método a usar:** `.map()`
+
+**Concepto Clave:** Al usar `.map()`, si la condición **no se cumple**, se devuelve la tarea original. Si la condición **se cumple**, se devuelve un **nuevo objeto** tarea (usando *spread* para copiar propiedades y luego sobrescribir `completada`).
+
+---
+
+## 🗑️ 4. Eliminar (DELETE)
+
+Simular la eliminación de un elemento.
+
+### Ejercicio 4.1: Eliminar una Tarea
+
+**Tarea:** Crea un **nuevo *array*** llamado `tareasRestantes` que contenga **todas** las tareas excepto la tarea con `id: 2`.
+
+**Método a usar:** `.filter()`
+
+**Concepto Clave:** En lugar de filtrar por lo que queremos *mantener*, filtramos por lo que **no queremos eliminar**.
+
+---
+
+## 🔗 Prueba Final: CRUD Encadenado
+
+### Ejercicio 5.1: Flujo Completo
+
+**Tarea:** Realiza las siguientes operaciones de forma encadenada sobre el *array* `tareas` (sin crear variables intermedias):
+
+1. **Actualizar:** Usa `.map()` para marcar **todas** las tareas pendientes (`completada: false`) como **urgentes** (añadiendo una propiedad `urgente: true`).
+2. **Filtrar:** Usa `.filter()` para eliminar del listado aquellas tareas que ya estaban completadas (`completada: true`).
+
+Guarda el resultado en `pendientesUrgentes`.
+
+**Requisito:** `pendientesUrgentes` debe ser un *array* de **objetos** con las tareas que estaban pendientes, cada una con la nueva propiedad `urgente: true`. El *array* `tareas` original no debe cambiar.
+
+**Ampliación:** Añade un tercer paso a la cadena: usa `.map()` para obtener un *array* de *strings* con **solo las descripciones** de esas tareas. Guárdalo en `descripcionesUrgentes`. Observa que en este último paso la propiedad `urgente` ya no aparece, porque solo te quedas con el texto.
+
+---
+
+# 🛠️ C. Ejercicios de ordenación de arrays
+
+⚠️ **Importante:** `.sort()` **modifica el array original**. En todos los ejercicios de este bloque, ordena **una copia** para que el array original quede intacto:
+
+```jsx
+const copiaOrdenada = [...array].sort(/* función de comparación */);
+// En Node 20+ y navegadores actuales también puedes usar: array.toSorted(…)
+```
+
+## 🥗 Ejercicio 1: El problema de los números (Primitivos)
+
+**Escenario:** Tienes una lista de temperaturas registradas en un día, pero están desordenadas.
+
+`const temperaturas = [12, 5, 32, 100, 28, 0, -5];`
+
+**Tarea:**
+
+1. Usa `.sort()` sin argumentos y observa qué pasa.
+2. Corrige el código usando una **función de comparación** para ordenar las temperaturas de **menor a mayor**.
+
+💡 Pista
+
+Recuerda que para números necesitas la fórmula `(a, b) => a - b`.
+
+---
+
+## 🏅 Ejercicio 2: El Ranking de Jugadores (Objetos)
+
+**Escenario:** Tienes una lista de jugadores con sus puntajes. Quieres mostrar quién va ganando (el puntaje más alto primero).
+
+```jsx
+const jugadores = [
+  { nombre: "Erik", puntos: 450 },
+  { nombre: "Valeria", puntos: 980 },
+  { nombre: "Matias", puntos: 120 },
+  { nombre: "Sandra", puntos: 750 }
+];
+```
+
+**Tarea:**
+
+1. Crea un **nuevo array** llamado `ranking` con los jugadores ordenados de **mayor a menor** puntaje (orden descendente).
+2. Comprueba con `console.log(jugadores)` que el array original **no ha cambiado**.
+
+💡 Pista
+
+Para orden descendente (el más grande primero), la resta debe ser al revés: `b.puntos - a.puntos`
+
+---
+
+## 🧪 Ejercicio 3: El Diccionario Corregido
+
+**Escenario:** Tienes una lista de nombres de alumnos que incluyen tildes y caracteres especiales. Debes ordenarlos alfabéticamente de forma correcta para un listado oficial.
+
+```jsx
+const alumnos = ["Íñigo", "Álvaro", "Berenice", "Ángela", "Niño", "Ñandú"];
+```
+
+**Tarea:**
+
+1. Crea un **nuevo array** llamado `listadoOficial` con los alumnos ordenados alfabéticamente de la **A** a la **Z**, sin modificar `alumnos`.
+2. Asegúrate de que “Álvaro” y “Ángela” aparezcan al principio y la “Ñ” después de la “N”.

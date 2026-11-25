@@ -1,0 +1,227 @@
+# El servicio de la tienda
+
+**Diseño de un servicio de datos con funciones puras** 
+
+Una pequeña tienda de informática quiere una aplicación web para gestionar sus productos. Antes de construir la página, necesita el **servicio de datos**: un módulo ES6 con todas las funciones puras que la aplicación llamará desde sus eventos.
+
+Vas a diseñarlo y programarlo siguiendo **los cuatro pasos** vistos en clase. Cada paso produce un entregable, y no se empieza el siguiente sin terminar el anterior.
+
+| Paso | Qué haces | Entregable |
+| --- | --- | --- |
+| 1 | Conocer los datos | `paso1-datos.md` |
+| 2 | Detectar las operaciones | `paso2-operaciones.md` |
+| 3 | Diseñar las funciones | `servicio-productos.js` con firmas y JSDoc, **sin código** |
+| 4 | Programar y probar | `servicio-productos.js` completo y `main.js` con las pruebas |
+
+## Estructura del proyecto
+
+```
+tienda/
+├── package.json              ← { "type": "module" }
+├── productos.js              ← se entrega hecho (no lo modifiques)
+├── paso1-datos.md
+├── paso2-operaciones.md
+├── servicio-productos.js     ← tu servicio
+└── main.js                   ← tus pruebas con console.log
+```
+
+## Los datos
+
+El archivo `productos.js` se entrega hecho:
+
+```jsx
+export const CATEGORIAS = ['Accesorios', 'Audio', 'Monitores', 'Periféricos'];
+
+export const productos = [
+  { id: 1, nombre: 'Teclado mecánico', categoria: 'Periféricos', precio: 59.9, stock: 12, enOferta: false },
+  { id: 2, nombre: 'Ratón inalámbrico', categoria: 'Periféricos', precio: 24.5, stock: 0, enOferta: true },
+  { id: 3, nombre: 'Monitor 27"', categoria: 'Monitores', precio: 289, stock: 4, enOferta: false },
+  { id: 4, nombre: 'Auriculares Bluetooth', categoria: 'Audio', precio: 79.99, stock: 7, enOferta: true },
+  { id: 5, nombre: 'Webcam HD', categoria: 'Periféricos', precio: 39, stock: 0, enOferta: false },
+  { id: 6, nombre: 'Altavoces 2.1', categoria: 'Audio', precio: 65, stock: 3, enOferta: false },
+  { id: 7, nombre: 'Monitor 24"', categoria: 'Monitores', precio: 159, stock: 9, enOferta: true },
+  { id: 8, nombre: 'Alfombrilla XL', categoria: 'Accesorios', precio: 15, stock: 25, enOferta: false },
+]
+```
+
+---
+
+## Paso 1 · Conocer los datos
+
+Observa un producto y completa en `paso1-datos.md` la ficha técnica de sus campos:
+
+| Campo | Tipo | Ejemplo | Reglas |
+| --- | --- | --- | --- |
+| id | entero | 2 | >0 |
+| nombre | string | Monitor | obligatorio |
+| categoria |  |  |  |
+| precio |  |  |  |
+| stock |  |  |  |
+| enOferta |  |  |  |
+
+En la columna **Reglas**, piensa qué valores son válidos y cuáles no. Por ejemplo: ¿puede ser negativo? ¿puede tener decimales? ¿puede estar vacío? ¿puede tomar cualquier valor o solo unos fijos?
+
+Debajo de la tabla, responde:
+
+1. ¿Por qué campos tendría sentido **ordenar** la lista?
+2. ¿Por qué campos tendría sentido **filtrar**?
+3. ¿Con qué campos se pueden hacer **cálculos**?
+
+---
+
+## Paso 2 · Detectar las operaciones
+
+La dueña de la tienda explica lo que necesita:
+
+> «Quiero poder dar de alta productos nuevos, corregir sus datos y retirar los que ya no vendo. Cuando me llega mercancía, necesito sumar unidades al stock de un producto, y cuando vendo, restarlas, aunque nunca puede quedar un stock negativo. También quiero poner o quitar un producto de las ofertas.
+> 
+> 
+> En la pantalla quiero ver la ficha de un producto concreto y buscar por su nombre. Me interesa ver solo los de una categoría, los que están en oferta y los que se han agotado. La lista la quiero ordenar por nombre, por precio o por unidades.
+> 
+> En rebajas, a veces aplico un descuento a todos los productos de una categoría.
+> 
+> Y para mis cuentas necesito saber cuántos productos tengo de cada categoría, cuánto dinero tengo en el almacén (el precio de cada producto por sus unidades), cuál es el producto más caro y un resumen general de la tienda.
+> 
+> Ah, y que no se pueda dar de alta un producto con datos incorrectos.»
+> 
+
+En `paso2-operaciones.md`:
+
+1. Escribe una frase **«El usuario quiere…»** por cada necesidad. Debería haber **al menos 15**.
+2. Subraya (en **negrita**) el **verbo** de cada frase.
+3. Agrupa las frases en las **cinco familias**: cambiar, buscar y filtrar, ordenar, resumir y validar.
+4. Repasa cada familia y pregúntate si falta algo que la tienda vaya a necesitar.
+
+---
+
+## Paso 3 · Diseñar las funciones
+
+Crea `servicio-productos.js` y escribe **solo la firma** de cada función, con su comentario JSDoc y el cuerpo vacío:
+
+```jsx
+/**
+ * Descripción breve de lo que hace.
+ *@param{Object[]} productos
+ *@param{number|string} id
+ *@returns {Object[]} Qué devuelve
+ */
+export const nombreDeLaFuncion = (productos, id) => {
+  // Se programa en el paso 4
+};
+```
+
+Reglas de diseño:
+
+1. **Nombres:** verbo + objeto, en español y en camelCase (`filtrarPorCategoria`, `reponerStock`…).
+2. **Entradas:** el array de productos va **siempre primero**. Después, los datos que ajustan la operación. Los parámetros opcionales llevan **valor por defecto**.
+3. **Salida:** uno de los cuatro tipos vistos en clase, y siempre el mismo, aunque no haya resultados:
+
+| Si la función… | Devuelve |
+| --- | --- |
+| cambia, filtra u ordena | `Object[]` nuevo (`[]` si no hay ninguno) |
+| busca un producto concreto | el producto o `null` |
+| resume | un `number` o un objeto |
+| valida | `string[]` con los errores (`[]` si todo es correcto) |
+1. **Una función en vez de varias:** para ordenar, una sola función que reciba el campo como parámetro, no una por campo.
+2. **Exportar:** exporta las funciones que usará la aplicación. Si necesitas funciones auxiliares (por ejemplo, para comparar ids), déjalas **sin export**.
+3. **Ids:** desde la página el id llegará como texto (`'3'`). Tus funciones deben aceptarlo igual que el número `3`.
+
+**Casos que debes decidir en el diseño** (anótalos en el JSDoc):
+
+- ¿Qué devuelve `buscar…` si el texto está vacío?
+- ¿Qué ocurre si se intentan vender más unidades de las que hay en stock?
+- ¿Cómo indicarás «todas las categorías» en el filtro por categoría?
+- ¿Con cuántos decimales se devuelven los precios tras un descuento?
+
+---
+
+## Paso 4 · Programar y probar
+
+### 4.1 · Programa las funciones
+
+Usa la receta de cada familia:
+
+| Si la función… | usa… |
+| --- | --- |
+| añade | spread de arrays: `[...productos, nuevo]` |
+| cambia uno o varios | `map` + spread de objetos |
+| quita | `filter` |
+| busca uno | `find` + `?? null` |
+| busca varios | `filter` |
+| ordena | copia + `sort`: `[...productos].sort(…)` |
+| resume | `reduce` (o `filter` + `length`) |
+| valida | array de reglas + `filter` + `map` |
+
+**Prohibido:** `push`, `pop`, `shift`, `unshift`, `splice`, `sort` o `reverse` sobre el array recibido, y asignar propiedades (`producto.stock = 0`). Tampoco puede haber `console.log`, `alert` ni acceso al DOM dentro del servicio: las funciones **solo reciben y devuelven datos**.
+
+### 4.2 · Prueba cada función a mano en `main.js`
+
+Programa y prueba **las funciones de una en una**. No pases a la siguiente hasta que la anterior funcione.
+
+Para cada función:
+
+1. **Antes de ejecutar**, escribe en un comentario el resultado que esperas.
+2. Llama a la función y muestra su salida con `console.log`.
+3. Ejecuta `node main.js` y compara lo que sale con tu comentario.
+4. Prueba al menos **un caso normal** y **un caso límite** (id que no existe, lista vacía, texto vacío, cantidad mayor que el stock…).
+
+Ejemplo:
+
+```jsx
+import { productos } from './productos.js';
+import { productosAgotados, obtenerProductoPorId } from './servicio-productos.js';
+
+console.log('--- productosAgotados ---');
+// Espero: Ratón inalámbrico y Webcam HD
+console.log(productosAgotados(productos));
+// Caso límite. Espero: []
+console.log(productosAgotados([]));
+
+console.log('--- obtenerProductoPorId ---');
+// Espero: el Monitor 27"
+console.log(obtenerProductoPorId(productos, '3'));
+// Caso límite. Espero: null
+console.log(obtenerProductoPorId(productos, 99));
+```
+
+Consejos para que la salida se lea bien:
+
+```jsx
+// Ver solo los nombres de una lista de productos
+const nombres = (lista) => lista.map((producto) => producto.nombre);
+console.log(nombres(productosEnOferta(productos)));
+
+// Ver la lista como una tabla
+console.table(ordenarProductos(productos, 'precio'));
+```
+
+### 4.3 · Comprobación final
+
+Al final de `main.js`, comprueba que los datos originales no han cambiado:
+
+```jsx
+console.log('--- ¿Datos originales intactos? ---');
+console.table(productos); // deben aparecer exactamente igual que en productos.js
+```
+
+### Resultados de referencia
+
+Usa estos valores para comprobar tus funciones de cálculo con los datos originales:
+
+| Comprobación | Resultado |
+| --- | --- |
+| Productos agotados | Ratón inalámbrico y Webcam HD |
+| Productos en oferta | Ratón inalámbrico, Auriculares Bluetooth y Monitor 24” |
+| Productos por categoría | Periféricos: 3 · Monitores: 2 · Audio: 2 · Accesorios: 1 |
+| Valor del almacén (precio × stock) | 4435,73 € |
+| Unidades totales en stock | 60 |
+| Precio medio | 91,42 € |
+| Producto más caro | Monitor 27” |
+| Ordenados por nombre (primeros tres) | Alfombrilla XL, Altavoces 2.1, Auriculares Bluetooth |
+| Descuento del 10 % en Audio | Auriculares Bluetooth: 71,99 € · Altavoces 2.1: 58,50 € |
+
+---
+
+## Entrega
+
+Una carpeta comprimida con los seis archivos de la estructura del proyecto.
